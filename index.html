@@ -1,0 +1,1079 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIEQ · Sistema de Etiquetado Quimico · Red Hospitalaria Chubut</title>
+<style>
+
+:root{
+  --azul:#10233f; --azul2:#173b5c; --petroleo:#15515b; --agua:#8bd3cf; --agua2:#d9f2ef;
+  --gris:#f5f7f9; --texto:#172033; --borde:#d9e3ea; --alerta:#b42318; --ambar:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0; font-family:Arial, Helvetica, sans-serif; color:var(--texto); background:white;}
+header{background:linear-gradient(135deg,var(--azul),var(--petroleo)); color:white; padding:18px 24px; border-bottom:5px solid var(--agua);}
+.header-wrap{max-width:1180px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:18px;}
+.brand{display:flex; align-items:center; gap:14px;}
+.logo{width:58px;height:58px;border:2px solid rgba(255,255,255,.9); border-radius:12px; display:flex;align-items:center;justify-content:center;font-weight:800;letter-spacing:.04em;color:#fff;background:rgba(255,255,255,.08)}
+.brand h1{font-size:22px;margin:0;font-weight:800;letter-spacing:.02em}.brand p{margin:4px 0 0;font-size:13px;opacity:.92}.top-note{font-size:13px;text-align:right;line-height:1.35;opacity:.95}
+main{max-width:1180px;margin:22px auto;padding:0 18px 40px}.grid{display:grid;grid-template-columns:390px 1fr;gap:18px;align-items:start}.panel{border:1px solid var(--borde);border-radius:16px;background:white;box-shadow:0 2px 10px rgba(16,35,63,.06);overflow:hidden}.panel h2{margin:0;padding:14px 16px;background:var(--gris);font-size:16px;color:var(--azul);border-bottom:1px solid var(--borde)}.panel-body{padding:16px}
+label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6px}select,input,textarea{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:10px 11px;font-family:Arial,Helvetica,sans-serif;font-size:14px;background:white}textarea{min-height:70px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.checks{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}.check{display:flex;align-items:center;gap:7px;font-size:13px;color:#334155}.check input{width:auto}.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}button{border:0;border-radius:10px;padding:11px 14px;font-weight:800;cursor:pointer;background:var(--azul2);color:#fff}button.secondary{background:var(--petroleo)}button.light{background:var(--agua2);color:var(--azul)}button.danger{background:var(--alerta)}.small{font-size:12px;color:#64748b;line-height:1.35}.notice{background:#f8fafc;border-left:5px solid var(--agua);padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.35}.warn{background:#fff7ed;border-left-color:#f97316}.admin{display:none}.admin.on{display:block}.catalog-preview{font-size:12px;line-height:1.35;border:1px solid var(--borde);border-radius:10px;padding:10px;background:#fbfdff;max-height:210px;overflow:auto}.hidden{display:none!important}
+/* Labels */
+.sheet-options{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:12px}.labels{display:grid;grid-template-columns:1fr 1fr;gap:12px}.label-card{background:#fff;border:2px solid var(--azul);border-radius:13px;min-height:345px;display:flex;flex-direction:column;overflow:visible;page-break-inside:avoid}.lab-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 12px;background:linear-gradient(90deg,#effaf8,#fff);border-bottom:2px solid var(--azul)}.lab-brand{display:flex;align-items:center;gap:10px}.lab-logo{width:70px;height:44px;border-radius:8px;background:#fff;border:1px solid var(--borde);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;letter-spacing:.06em;overflow:hidden;flex:0 0 70px}.lab-logo img{width:100%;height:100%;object-fit:contain;background:#fff;padding:2px}.lab-hospital{font-weight:800;color:var(--azul);font-size:13px}.lab-sub{font-size:10px;color:#475569;font-weight:700}.lab-sign{font-weight:800;color:var(--petroleo);font-size:10.5px;text-align:right;line-height:1.2;max-width:180px}.subtype-banner{grid-column:1/3;background:#ecfeff;border:1px solid #99f6e4;color:#0f3f46;border-radius:9px;padding:6px 8px;font-size:12px;font-weight:800;line-height:1.15}.lab-main{padding:10px 12px 12px;display:grid;grid-template-columns:138px 1fr;gap:10px;flex:1}.ybox{background:linear-gradient(180deg,#c62828,#8e1f1f);color:#fff;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:132px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.12);padding:8px 6px}.ybox .code{font-size:60px;font-weight:900;line-height:.9;letter-spacing:-.03em;max-width:100%;white-space:nowrap;overflow:hidden}.ybox .code.small-code{font-size:52px}.ybox .class{font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-top:7px}.titlebox .kind{display:inline-block;font-size:11px;text-transform:uppercase;color:#fff;font-weight:800;background:#0d4d5a;padding:4px 8px;border-radius:999px;margin-bottom:4px}.titlebox .title{font-size:19px;font-weight:900;color:var(--azul);line-height:1.05;margin:2px 0 4px}.titlebox .legal{font-size:11px;line-height:1.25;color:#334155}.fieldline{grid-column:1/3;border-top:1px solid #e2e8f0;padding-top:6px;font-size:12px;line-height:1.25}.fieldline b{color:#0f172a}.picto-row{grid-column:1/3;display:flex;flex-wrap:wrap;gap:8px;padding-top:2px}.picto{display:flex;align-items:center;gap:9px;border:1px solid #dbe5eb;border-radius:10px;background:#fff;padding:6px 8px}.diamond{width:28px;height:28px;border:2px solid #d62828;background:#fff;transform:rotate(45deg);border-radius:2px;display:flex;align-items:center;justify-content:center;flex:0 0 28px}.diamond span{transform:rotate(-45deg);font-size:9px;font-weight:900;color:#0f172a;line-height:1;text-align:center}.diamond.muted{border-color:#64748b;background:#f8fafc}.picto.pending{border-style:dashed;background:#f8fafc}.picto .ptxt{font-size:10px;font-weight:800;color:#334155;line-height:1.1}.blocks{grid-column:1/3;display:grid;grid-template-columns:1fr 1fr;gap:7px}.block{border:1px solid #dbe5eb;border-radius:9px;padding:7px;background:#fbfdff;min-height:58px}.block h4{margin:0 0 3px;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--petroleo)}.block p{margin:0;font-size:11px;line-height:1.22}.block.danger-block{background:#fff5f5;border-color:#fecaca}.block.store{background:#f0fdfa;border-color:#99f6e4}.footer-note{grid-column:1/3;background:var(--azul);color:#fff;border-radius:8px;padding:6px 8px;font-size:11px;font-weight:800;text-align:center}.datechip{display:inline-block;background:#eef6ff;border:1px solid #b9d6ef;border-radius:999px;padding:3px 7px;margin:2px 3px 2px 0;font-size:11px}.noapt .ybox{background:#991b1b}.noapt{border-color:#991b1b}.noapt .footer-note{background:#991b1b}.empty-state{border:1px dashed #94a3b8;border-radius:16px;padding:28px;text-align:center;color:#64748b;background:#f8fafc}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.labels{grid-template-columns:1fr}.header-wrap{flex-direction:column;align-items:flex-start}.top-note{text-align:left}.row,.row3{grid-template-columns:1fr}}
+
+.labels.layout4{grid-template-columns:1fr 1fr}.labels.layout2{grid-template-columns:1fr 1fr}.labels.layout1{grid-template-columns:1fr}.labels.layout2 .label-card{min-height:420px}.labels.layout1 .label-card{min-height:520px}
+@media print{
+  @page{size:A4 portrait;margin:6mm}
+  *{box-sizing:border-box!important}
+  html,body{
+    margin:0!important;
+    padding:0!important;
+    width:198mm!important;
+    max-width:198mm!important;
+    overflow:visible!important;
+    background:#fff!important;
+  }
+  header,.grid>.panel:first-child,.sheet-options,.no-print{display:none!important}
+  main.wrap,.wrap{
+    margin:0!important;
+    padding:0!important;
+    width:198mm!important;
+    max-width:198mm!important;
+  }
+  .grid,.preview-panel,.preview-panel .panel-body{
+    display:block!important;
+    width:198mm!important;
+    max-width:198mm!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+  .preview-panel h2{display:none!important}
+  .labels{
+    display:grid!important;
+    width:198mm!important;
+    max-width:198mm!important;
+    margin:0!important;
+    padding:0!important;
+    gap:4mm!important;
+    overflow:visible!important;
+  }
+  .labels.layout1{grid-template-columns:186mm!important}
+  .labels.layout2{grid-template-columns:93mm 93mm!important}
+  .labels.layout4{grid-template-columns:93mm 93mm!important}
+
+  .label-card{
+    width:auto!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:0!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    border-width:1.2px!important;
+    border-radius:8px!important;
+    page-break-inside:avoid!important;
+    break-inside:avoid!important;
+    margin:0!important;
+  }
+  .labels.layout1 .label-card{
+    width:186mm!important;
+    height:276mm!important;
+    max-height:276mm!important;
+    page-break-after:always!important;
+  }
+  .labels.layout1 .label-card:last-child{page-break-after:auto!important}
+  .labels.layout2 .label-card{
+    width:93mm!important;
+    height:136mm!important;
+    max-height:136mm!important;
+  }
+  .labels.layout4 .label-card{
+    width:93mm!important;
+    height:136mm!important;
+    max-height:136mm!important;
+  }
+
+  .lab-head{padding:4px 6px!important;gap:5px!important;border-bottom-width:1px!important}
+  .lab-logo{width:52px!important;height:32px!important;font-size:9px!important;border-radius:5px!important;background:#fff!important}
+  .lab-hospital{font-size:8pt!important}
+  .lab-sub{font-size:6pt!important}
+  .lab-sign{font-size:5.8pt!important;line-height:1!important;max-width:31mm!important}
+  .lab-main{padding:4px 6px!important;grid-template-columns:66px 1fr!important;gap:3px!important}
+  .ybox{min-height:60px!important;border-radius:7px!important;padding:2px!important}
+  .ybox .code{font-size:22pt!important;line-height:.9!important;letter-spacing:-.02em!important}
+  .ybox .code.small-code{font-size:19pt!important}
+  .ybox .class{font-size:5.2pt!important;margin-top:1px!important}
+  .titlebox .kind{font-size:5.8pt!important;padding:1px 4px!important;margin-bottom:1px!important}
+  .titlebox .title{font-size:9.4pt!important;line-height:.98!important;margin:0 0 1px!important}
+  .titlebox .legal{font-size:5.9pt!important;line-height:1.02!important}
+  .subtype-banner{font-size:6pt!important;line-height:1!important;padding:2px 4px!important;border-radius:4px!important}
+  .fieldline{font-size:6pt!important;line-height:1!important;padding-top:2px!important}
+  .datechip{font-size:5.8pt!important;padding:1px 3px!important;margin:0 1px!important}
+  .picto-row{gap:2px!important;padding-top:1px!important}
+  .picto{gap:3px!important;padding:1px 3px!important;border-radius:5px!important}
+  .diamond{width:16px!important;height:16px!important;flex-basis:16px!important;border-width:1.2px!important}
+  .diamond span{font-size:5pt!important}
+  .picto .ptxt{font-size:5.6pt!important;line-height:1!important}
+  .blocks{gap:2px!important}
+  .block{padding:2px 3px!important;min-height:0!important;border-radius:5px!important}
+  .block h4{font-size:5.6pt!important;margin:0!important;letter-spacing:.02em!important}
+  .block p{font-size:5.7pt!important;line-height:1!important;margin:0!important}
+  .footer-note{font-size:6pt!important;line-height:1!important;padding:2px 4px!important;border-radius:5px!important}
+
+  /* En impresión se oculta solo este bloque secundario para evitar corte en Y3. */
+  .examples-line{display:none!important}
+}
+
+@media(max-width:900px){.grid{grid-template-columns:1fr}.labels{grid-template-columns:1fr}.header-wrap{flex-direction:column;align-items:flex-start}.top-note{text-align:left}.row,.row3{grid-template-columns:1fr}}
+
+.labels.layout4{grid-template-columns:1fr 1fr}.labels.layout2{grid-template-columns:1fr 1fr}.labels.layout1{grid-template-columns:1fr}.labels.layout2 .label-card{min-height:420px}.labels.layout1 .label-card{min-height:520px}
+@media print{
+  @page{size:A4 portrait;margin:5mm}
+  *{box-sizing:border-box!important}
+  html,body{background:#fff!important;width:100%!important;height:auto!important;overflow:visible!important}
+  header,.grid>.panel:first-child,.sheet-options,.no-print{display:none!important}
+  .wrap{max-width:none!important;margin:0!important;padding:0!important}
+  .grid{display:block!important}
+  .panel{box-shadow:none!important;border:0!important;padding:0!important;margin:0!important}
+  .labels{display:block!important;width:100%!important}
+  .label-card{
+    width:100%!important;
+    min-height:0!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    border-width:1.2px!important;
+    border-radius:8px!important;
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+    page-break-after:always!important;
+    margin:0 0 4mm 0!important;
+  }
+  .label-card:last-child{page-break-after:auto!important}
+  .lab-head{padding:4px 6px!important;gap:5px!important;border-bottom-width:1.2px!important}
+  .lab-logo{width:56px!important;height:34px!important;font-size:10px!important;border-radius:6px!important;background:#fff!important}
+  .lab-hospital{font-size:8.2pt!important}
+  .lab-sub{font-size:6.3pt!important}
+  .lab-sign{font-size:6.4pt!important;line-height:1.05!important;max-width:34mm!important}
+  .lab-main{padding:4px 6px 5px!important;grid-template-columns:74px 1fr!important;gap:4px!important}
+  .ybox{min-height:70px!important;border-radius:8px!important;padding:3px 2px!important}
+  .ybox .code{font-size:25pt!important;line-height:.9!important;max-width:100%!important;white-space:nowrap!important;overflow:hidden!important}
+  .ybox .code.small-code{font-size:21pt!important}
+  .ybox .class{font-size:5.7pt!important;margin-top:2px!important}
+  .titlebox .kind{font-size:6.2pt!important;padding:2px 5px!important;margin-bottom:2px!important}
+  .titlebox .title{font-size:10.2pt!important;line-height:1.0!important;margin:1px 0 2px!important}
+  .titlebox .legal{font-size:6.5pt!important;line-height:1.08!important}
+  .subtype-banner{font-size:6.6pt!important;padding:3px 5px!important;border-radius:5px!important;line-height:1.05!important}
+  .fieldline{font-size:6.6pt!important;line-height:1.05!important;padding-top:3px!important}
+  .datechip{font-size:6.2pt!important;padding:1px 4px!important;margin:1px!important}
+  .picto-row{gap:3px!important;padding-top:1px!important}
+  .picto{gap:4px!important;padding:2px 4px!important;border-radius:6px!important}
+  .diamond{width:18px!important;height:18px!important;flex-basis:18px!important;border-width:1.4px!important}
+  .diamond span{font-size:5.7pt!important}
+  .picto .ptxt{font-size:6.1pt!important;line-height:1.0!important}
+  .blocks{gap:3px!important}
+  .block{padding:3px 4px!important;min-height:0!important;border-radius:6px!important}
+  .block h4{font-size:6.1pt!important;margin-bottom:1px!important;letter-spacing:.025em!important}
+  .block p{font-size:6.2pt!important;line-height:1.06!important}
+  .footer-note{font-size:6.7pt!important;line-height:1.05!important;padding:3px 5px!important;border-radius:6px!important}
+}
+
+@media(max-width:900px){.grid{grid-template-columns:1fr}.labels{grid-template-columns:1fr}.header-wrap{flex-direction:column;align-items:flex-start}.top-note{text-align:left}.row,.row3{grid-template-columns:1fr}}
+
+.labels.layout4{grid-template-columns:1fr 1fr}.labels.layout2{grid-template-columns:1fr 1fr}.labels.layout1{grid-template-columns:1fr}.labels.layout2 .label-card{min-height:420px}.labels.layout1 .label-card{min-height:520px}
+@media print{
+  @page{size:A4 portrait;margin:5mm}
+  body{background:#fff!important}
+  header,.grid>.panel:first-child,.sheet-options,.no-print{display:none!important}
+  .wrap{max-width:none;margin:0;padding:0!important}
+  .grid{display:block!important}
+  .panel{box-shadow:none;border:0;padding:0!important;margin:0!important}
+  .labels{display:grid!important;gap:3mm!important;width:100%!important;align-items:start!important}
+  .labels-mode-4{grid-template-columns:1fr 1fr!important}
+  .labels-mode-2,.labels-mode-1{grid-template-columns:1fr!important}
+  .label-card{min-height:0!important;height:auto!important;max-height:none!important;overflow:visible!important;border-width:1.3px!important;border-radius:8px!important;break-inside:avoid!important;page-break-inside:avoid!important}
+  .labels-mode-4 .label-card{height:137mm!important;max-height:137mm!important;overflow:hidden!important}
+  .labels-mode-2 .label-card{height:137mm!important;max-height:137mm!important;overflow:hidden!important}
+  .labels-mode-1 .label-card{height:285mm!important;max-height:285mm!important;overflow:hidden!important}
+  .lab-head{padding:4px 6px!important;gap:5px!important;border-bottom-width:1.2px!important}
+  .lab-logo{width:56px!important;height:34px!important;font-size:10px!important;border-radius:6px!important;background:#fff!important}
+  .lab-hospital{font-size:8.2pt!important}
+  .lab-sub{font-size:6.3pt!important}
+  .lab-sign{font-size:6.4pt!important;line-height:1.05!important;max-width:34mm!important}
+  .lab-main{padding:4px 6px 5px!important;grid-template-columns:74px 1fr!important;gap:4px!important}
+  .ybox{min-height:70px!important;border-radius:8px!important;padding:3px 2px!important}
+  .ybox .code{font-size:25pt!important;line-height:.9!important;max-width:100%!important;white-space:nowrap!important;overflow:hidden!important}
+  .ybox .code.small-code{font-size:21pt!important}
+  .ybox .class{font-size:5.7pt!important;margin-top:2px!important}
+  .titlebox .kind{font-size:6.2pt!important;padding:2px 5px!important;margin-bottom:2px!important}
+  .titlebox .title{font-size:10.2pt!important;line-height:1.0!important;margin:1px 0 2px!important}
+  .titlebox .legal{font-size:6.5pt!important;line-height:1.08!important}
+  .subtype-banner{font-size:6.6pt!important;padding:3px 5px!important;border-radius:5px!important;line-height:1.05!important}
+  .fieldline{font-size:6.6pt!important;line-height:1.05!important;padding-top:3px!important}
+  .datechip{font-size:6.2pt!important;padding:1px 4px!important;margin:1px!important}
+  .picto-row{gap:3px!important;padding-top:1px!important}
+  .picto{gap:4px!important;padding:2px 4px!important;border-radius:6px!important}
+  .diamond{width:18px!important;height:18px!important;flex-basis:18px!important;border-width:1.4px!important}
+  .diamond span{font-size:5.7pt!important}
+  .picto .ptxt{font-size:6.1pt!important;line-height:1.0!important}
+  .blocks{gap:3px!important}
+  .block{padding:3px 4px!important;min-height:0!important;border-radius:6px!important}
+  .block h4{font-size:6.1pt!important;margin-bottom:1px!important;letter-spacing:.025em!important}
+  .block p{font-size:6.2pt!important;line-height:1.06!important}
+  .footer-note{font-size:6.7pt!important;line-height:1.05!important;padding:3px 5px!important;border-radius:6px!important}
+  /* En 4 etiquetas por hoja, se prioriza que no se corte: la info secundaria se compacta al máximo. */
+  .labels-mode-4 .block p{font-size:5.9pt!important;line-height:1.02!important}
+  .labels-mode-4 .footer-note{font-size:6.1pt!important}
+}
+
+@media(max-width:900px){.grid{grid-template-columns:1fr}.labels{grid-template-columns:1fr}.header-wrap{flex-direction:column;align-items:flex-start}.top-note{text-align:left}.row,.row3{grid-template-columns:1fr}}
+
+.labels.layout4{grid-template-columns:1fr 1fr}.labels.layout2{grid-template-columns:1fr 1fr}.labels.layout1{grid-template-columns:1fr}.labels.layout2 .label-card{min-height:420px}.labels.layout1 .label-card{min-height:520px}
+@media print{
+  header, .controls, .no-print{display:none!important}
+  body{background:white}
+  main{max-width:none;margin:0;padding:0}
+  .grid{display:block}
+  .panel{box-shadow:none;border:0}
+  .preview-panel h2{display:none}
+  .panel-body{padding:0}
+  .labels{display:grid!important;gap:5mm!important;align-items:start}
+  .labels.layout4{grid-template-columns:1fr 1fr!important}
+  .labels.layout2{grid-template-columns:1fr 1fr!important}
+  .labels.layout1{grid-template-columns:1fr!important}
+  .labels.layout4 .label-card{height:132mm!important;min-height:0!important;overflow:hidden!important;break-inside:avoid;page-break-inside:avoid;border-width:1.4pt}
+  .labels.layout2 .label-card{height:132mm!important;min-height:0!important;overflow:hidden!important;break-inside:avoid;page-break-inside:avoid;border-width:1.5pt}
+  .labels.layout1 .label-card{height:267mm!important;min-height:0!important;overflow:hidden!important;break-inside:avoid;page-break-inside:avoid;border-width:1.6pt}
+  .lab-head{padding:5px 7px!important;gap:6px!important}
+  .lab-logo{width:40px!important;height:40px!important;font-size:12px!important;border-radius:8px!important}
+  .lab-hospital{font-size:10.5pt!important}
+  .lab-sub{font-size:7.2pt!important}
+  .lab-sign{font-size:7.2pt!important;line-height:1.15!important;max-width:44mm!important}
+  .lab-main{padding:6px 7px!important;grid-template-columns:82px 1fr!important;gap:5px!important}
+  .ybox{min-height:82px!important;border-radius:9px!important;padding:4px 3px!important}
+  .ybox .code{font-size:28pt!important;line-height:.9!important;max-width:100%!important;white-space:nowrap!important;overflow:hidden!important}
+  .ybox .code.small-code{font-size:24pt!important}
+  .ybox .class{font-size:6.8pt!important;margin-top:4px!important}
+  .titlebox .kind{font-size:7pt!important;padding:2px 6px!important;margin-bottom:2px!important}
+  .titlebox .title{font-size:12.5pt!important;line-height:1.02!important;margin:1px 0 2px!important}
+  .titlebox .legal{font-size:7.2pt!important;line-height:1.12!important}
+  .fieldline{font-size:7.2pt!important;line-height:1.12!important;padding-top:4px!important}
+  .datechip{font-size:6.8pt!important;padding:2px 5px!important;margin:1px!important}
+  .picto-row{gap:4px!important;padding-top:1px!important}
+  .picto{gap:5px!important;padding:3px 5px!important;border-radius:7px!important}
+  .diamond{width:20px!important;height:20px!important;flex-basis:20px!important;border-width:1.5px!important}
+  .diamond span{font-size:6.2pt!important}
+  .picto .ptxt{font-size:6.8pt!important;line-height:1.02!important}
+  .blocks{gap:4px!important}
+  .block{padding:4px!important;border-radius:7px!important;min-height:0!important}
+  .block h4{font-size:6.9pt!important;margin:0 0 2px!important}
+  .block p{font-size:7pt!important;line-height:1.08!important}
+  .footer-note{font-size:7pt!important;line-height:1.05!important;padding:4px 6px!important;border-radius:6px!important}
+  @page{size:A4 portrait;margin:8mm}
+}
+
+
+/* ─── TABS ─── */
+.module-tabs{display:flex;gap:0;border-bottom:3px solid var(--agua);margin-bottom:0}
+.module-tab{padding:11px 28px;font-size:15px;font-weight:800;cursor:pointer;border:0;background:rgba(255,255,255,.1);color:rgba(255,255,255,.75);border-radius:10px 10px 0 0;margin-right:4px;letter-spacing:.02em;transition:all .15s}
+.module-tab:hover{background:rgba(255,255,255,.2);color:#fff}
+.module-tab.active{background:#fff;color:var(--azul)}
+.module-section{display:none}
+.module-section.active{display:block}
+
+/* ─── HOSPITAL SELECTOR ─── */
+.hosp-bar{background:linear-gradient(90deg,#0d1f38,#11303e);padding:8px 24px;display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.hosp-bar label{color:rgba(255,255,255,.7);font-size:12px;font-weight:700;white-space:nowrap}
+.hosp-select{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:700;width:auto;min-width:320px}
+.hosp-select option{background:#0d2f4f;color:#fff}
+.hosp-logo-preview{height:32px;width:auto;max-width:80px;object-fit:contain;background:#fff;border-radius:6px;padding:2px}
+
+/* ─── SGA MODULE ─── */
+.sga-label-card{background:#fff;border:2px solid var(--azul);border-radius:13px;min-height:345px;display:flex;flex-direction:column;overflow:visible;page-break-inside:avoid}
+.sga-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 12px;background:linear-gradient(90deg,#effaf8,#fff);border-bottom:2px solid var(--azul)}
+.sga-head-logo{height:28px;width:auto;max-width:70px;object-fit:contain;background:#fff;border-radius:5px;padding:1px}
+.sga-hospital{font-weight:800;color:var(--azul);font-size:12px}
+.sga-sub{font-size:9.5px;color:#475569;font-weight:700}
+.sga-sign{font-weight:800;color:var(--petroleo);font-size:10px;text-align:right;line-height:1.2;max-width:180px}
+.sga-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.sga-title-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.sga-name{font-size:16px;font-weight:900;color:var(--azul);text-transform:uppercase;line-height:1.05}
+.sga-signal{display:inline-block;border:1.5px solid currentColor;padding:2px 7px;font-weight:800;font-size:10.5px;border-radius:4px}
+.sga-signal.peligro{color:#b42318;border-color:#b42318;background:#fff5f5}
+.sga-signal.atencion{color:#b45309;border-color:#f59e0b;background:#fffbeb}
+.sga-signal.sin-peligro{color:#166534;border-color:#16a34a;background:#f0fdf4}
+.sga-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:9.5px}
+.sga-field{border:1px solid #e2e8f0;border-radius:5px;padding:3px 6px}
+.sga-field b{color:#0f172a;display:block;font-size:8.5px;text-transform:uppercase;letter-spacing:.04em;color:#64748b}
+.sga-ghs{display:flex;flex-wrap:wrap;gap:5px;min-height:22px}
+.sga-diam-wrap{display:flex;flex-direction:column;align-items:center;gap:2px}
+.sga-diam{width:30px;height:30px;border:2px solid #dc2626;background:#fff;transform:rotate(45deg);border-radius:2px;display:flex;align-items:center;justify-content:center}
+.sga-diam span{transform:rotate(-45deg);font-size:7.5px;font-weight:900;color:#0f172a;line-height:1;text-align:center}
+.sga-diam-lbl{font-size:6px;color:#475569;text-align:center;max-width:36px;line-height:1}
+.sga-hp{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:8px;line-height:1.2}
+.sga-hp-col h4{font-size:8.5px;font-weight:800;color:var(--azul);margin:0 0 2px;text-transform:uppercase;letter-spacing:.04em}
+.sga-hp-col ul{margin:0;padding-left:12px}
+.sga-hp-col li{margin-bottom:1px}
+.sga-vars{display:grid;grid-template-columns:1fr 1fr;gap:3px;font-size:8px}
+.sga-footer{background:var(--azul);color:#fff;border-radius:6px;padding:5px 8px;font-size:8px;font-weight:700;line-height:1.2}
+.sga-emerg{font-size:7px;opacity:.85}
+.blank-line{display:inline-block;min-width:80px;height:0.9em;border-bottom:1.5px solid #333;vertical-align:baseline;margin-left:2px}
+@media print{.blank-line{border-bottom:1.5px solid #000!important}}
+
+/* ─── DIL INFO BOX ─── */
+.dil-info{background:#f0fafa;border-left:3px solid var(--petroleo);padding:7px 10px;border-radius:6px;font-size:11.5px;line-height:1.4;margin-top:4px;display:none}
+
+/* ─── PRINT SGA ─── */
+@media print{
+  .module-tabs,.hosp-bar,.controls,.no-print{display:none!important}
+  .module-section{display:block!important}
+  .module-section:not(.active){display:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-wrap">
+    <div class="brand">
+      <div class="logo" id="header-logo-box" style="padding:0;overflow:hidden"><img id="header-logo-img" src="" style="width:100%;height:100%;object-fit:contain;background:#fff"></div>
+      <div>
+        <h1>SIEQ · Sistema de Etiquetado Quimico</h1>
+        <p id="header-hosp-name">Red Hospitalaria · Provincia del Chubut</p>
+      </div>
+    </div>
+    <div class="top-note">Servicio de Higiene y Seguridad Laboral<br>Lic. Belen Pellegrini</div>
+  </div>
+  <div style="max-width:1180px;margin:0 auto;padding:0">
+    <div class="module-tabs">
+      <button class="module-tab active" onclick="switchModule('residuos',this)">⚠ Residuos peligrosos</button>
+      <button class="module-tab" onclick="switchModule('sga',this)">🏷 Etiquetas SGA / GHS</button>
+    </div>
+  </div>
+</header>
+
+<!-- HOSPITAL SELECTOR -->
+<div class="hosp-bar no-print">
+  <label>Hospital:</label>
+  <select class="hosp-select" id="hospSelect" onchange="onHospChange()" style="min-width:220px">
+    <option value="HMH">Hospital Maria Humphreys (HMH)</option>
+    <option value="HZT">Hospital Zonal Trelew - Dr. Adolfo Margara (HZT)</option>
+    <option value="HSST">Hospital Subzonal Santa Teresita (HSST)</option>
+  </select>
+  <label id="caps-label" style="display:none">Dependencia:</label>
+  <select class="hosp-select" id="capsSelect" onchange="onCapsChange()" style="display:none;min-width:300px"></select>
+  <img class="hosp-logo-preview" id="hosp-logo-preview" src="" alt="">
+</div>
+
+<main class="wrap" style="max-width:1180px;margin:0 auto;padding:18px 18px 40px">
+
+<!-- ══ MÓDULO RESIDUOS ══ -->
+<div id="mod-residuos" class="module-section active">
+  <div class="grid">
+    <section class="panel controls">
+      <h2>Generar etiqueta de residuo peligroso</h2>
+      <div class="panel-body">
+        <div class="notice">El usuario selecciona la corriente/categoria. La base institucional carga descripcion, incompatibilidades, almacenamiento y EPP. Los pictogramas solo aparecen si fueron validados por HyS.</div>
+        <label for="wasteSelect">Clase/corriente de residuo</label>
+        <select id="wasteSelect"></select>
+        <div class="catalog-preview" id="previewDB"></div>
+
+        <div id="y3Box" class="hidden">
+          <label for="y3Subtype">Diferenciacion de Y3 para la etiqueta</label>
+          <select id="y3Subtype">
+            <option value="">Seleccionar</option>
+            <option value="Ampollas / frascos ampolla en bidon">Ampollas / frascos ampolla en bidon</option>
+            <option value="Ampollas / frascos ampolla en caja">Ampollas / frascos ampolla en caja</option>
+            <option value="Medicamentos y productos farmaceuticos">Medicamentos y productos farmaceuticos</option>
+            <option value="Otro">Otro</option>
+          </select>
+          <div id="y3OtherBox" class="hidden">
+            <label for="y3Other">Especificar otra diferenciacion Y3</label>
+            <input id="y3Other" placeholder="Ej.: frascos de vidrio con restos de medicamento">
+          </div>
+        </div>
+
+        <div class="row">
+          <div><label for="sector">Servicio</label><input id="sector" placeholder="Ej.: Guardia, Farmacia, Laboratorio"></div>
+          <div><label for="area">Area de acopio</label>
+            <select id="area">
+              <option value="">Seleccionar</option>
+              <option value="Office de limpieza">Office de limpieza</option>
+              <option value="Office de enfermeria">Office de enfermeria</option>
+              <option value="Deposito intermedio">Deposito intermedio</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="row3">
+          <div><label for="cantidad">Cantidad</label>
+            <select id="cantidad">
+              <option value="">Seleccionar</option>
+              <option value="1 litro">1 litro</option>
+              <option value="5 litros">5 litros</option>
+              <option value="20 litros">20 litros</option>
+              <option value="120 dm3">120 dm3</option>
+              <option value="240 dm3">240 dm3</option>
+            </select>
+          </div>
+          <div><label for="recipiente">Recipiente</label>
+            <select id="recipiente">
+              <option value="">Seleccionar</option>
+              <option value="Bidon cerrado e identificado">Bidon</option>
+              <option value="Bolsa roja (Y1 - residuo patogenico/biologico)">Bolsa roja (Y1)</option>
+              <option value="Bolsa amarilla (Y3 - medicamentos)">Bolsa amarilla (Y3)</option>
+              <option value="Caja de carton rotulada">Caja</option>
+              <option value="Contenedor rigido cerrado rotulado">Contenedor rigido</option>
+              <option value="Envase original del producto">Envase original</option>
+            </select>
+          </div>
+          <div><label for="responsable">Responsable del servicio</label><input id="responsable" placeholder="Nombre / cargo"></div>
+        </div>
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="includeDate"> Incluir fecha de cierre/generacion</label>
+          <label class="check"><input type="checkbox" id="includeRetiro"> Incluir fecha limite/retiro</label>
+        </div>
+        <div class="row">
+          <div id="dateBox" class="hidden"><label for="fecha">Fecha</label><input type="date" id="fecha"></div>
+          <div id="retiroBox" class="hidden"><label for="retiro">Retiro / limite</label><input type="date" id="retiro"></div>
+        </div>
+        <label for="observaciones">Observacion operativa</label>
+        <textarea id="observaciones" placeholder="Ej.: No abrir. No compactar. Contenido dudoso."></textarea>
+        <div class="row">
+          <div><label for="copies">Cantidad de etiquetas</label><input id="copies" type="number" min="1" max="20" value="4"></div>
+          <div><label for="layout">Formato</label>
+            <select id="layout">
+              <option value="4">4 etiquetas por hoja A4</option>
+              <option value="2">2 etiquetas por hoja A4</option>
+              <option value="1">1 etiqueta por hoja A4</option>
+            </select>
+          </div>
+        </div>
+        <div class="btns">
+          <button onclick="generateLabels()">Generar etiquetas</button>
+          <button class="secondary" onclick="window.print()">Imprimir</button>
+          <button class="light" onclick="clearForm()">Limpiar</button>
+        </div>
+        <hr style="border:0;border-top:1px solid #e2e8f0;margin:18px 0">
+        <h3 style="font-size:15px;color:var(--azul);margin:0 0 8px">Acceso administracion HyS</h3>
+        <div class="row"><input id="adminPass" type="password" placeholder="Clave"><button class="secondary" onclick="unlockAdmin()">Ingresar</button></div>
+        <p class="small">El modo administracion permite editar la base local, importar/exportar JSON y agregar nuevas corrientes institucionales.</p>
+      </div>
+    </section>
+    <section class="panel preview-panel">
+      <h2>Vista previa</h2>
+      <div class="panel-body">
+        <div id="labels" class="labels"><div class="empty-state">Selecciona una clase de residuo y presiona Generar etiquetas.</div></div>
+      </div>
+    </section>
+  </div>
+
+  <section id="adminPanel" class="panel admin no-print" style="margin-top:18px">
+    <h2>Administracion de base institucional</h2>
+    <div class="panel-body">
+      <div class="notice warn">La base editada queda guardada en este navegador. Los pictogramas no se asignan automaticamente: solo cargar pictogramas validados por HyS. Exporta el JSON para conservar respaldo.</div>
+      <div class="row3">
+        <div><label>Codigo Y</label><input id="a_code" placeholder="Ej.: Y1"></div>
+        <div><label>Titulo corto</label><input id="a_title" placeholder="Ej.: Desechos clinicos"></div>
+        <div><label>Estado</label><select id="a_status"><option>ACTIVO</option><option>REVISION</option></select></div>
+      </div>
+      <label>Pictogramas validados por HyS (opcional)</label><input id="a_pictos" placeholder="Solo si esta validado. Ej.: biohazard / corrosive / flammable">
+      <label>Descripcion legal / institucional</label><textarea id="a_legal"></textarea>
+      <label>Explicacion simple para usuarios</label><textarea id="a_simple"></textarea>
+      <label>Ejemplos</label><textarea id="a_examples"></textarea>
+      <label>Caracteristicas peligrosas</label><textarea id="a_hazards"></textarea>
+      <div class="row"><div><label>Recipiente/contencion</label><textarea id="a_container"></textarea></div><div><label>EPP</label><textarea id="a_ppe"></textarea></div></div>
+      <div class="row"><div><label>Incompatibilidades</label><textarea id="a_incompat"></textarea></div><div><label>Almacenamiento</label><textarea id="a_storage"></textarea></div></div>
+      <label>Nota operativa</label><textarea id="a_note"></textarea>
+      <div class="btns">
+        <button onclick="saveAdminRecord()">Guardar/agregar</button>
+        <button class="light" onclick="loadSelectedIntoAdmin()">Editar seleccionado</button>
+        <button class="danger" onclick="deleteSelected()">Eliminar seleccionado</button>
+      </div>
+      <hr style="border:0;border-top:1px solid #e2e8f0;margin:18px 0">
+      <div class="btns">
+        <button class="secondary" onclick="exportDB()">Exportar JSON</button>
+        <button class="light" onclick="document.getElementById('importFile').click()">Importar JSON</button>
+        <button class="danger" onclick="resetDB()">Restaurar base inicial</button>
+        <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importDB(event)">
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ MÓDULO SGA ══ -->
+<div id="mod-sga" class="module-section">
+  <div class="grid">
+    <section class="panel controls">
+      <h2>Generar etiqueta SGA / GHS</h2>
+      <div class="panel-body">
+        <div class="notice">Selecciona el producto. Indicaciones H, consejos P y pictogramas GHS se cargan de la base. Validar siempre contra FDS vigente antes de rotular.</div>
+
+        <label for="sgaProd">Producto / sustancia</label>
+        <select id="sgaProd" onchange="sgaProdChange()"></select>
+
+        <label for="sgaDilSel">Dilucion / concentracion</label>
+        <select id="sgaDilSel" onchange="sgaDilChange()">
+          <optgroup label="General">
+            <option value="lpu">Listo para usar (sin diluir)</option>
+            <option value="70%">Concentracion 70%</option>
+            <option value="96%">Concentracion 96%</option>
+            <option value="10%">Concentracion 10%</option>
+            <option value="5%">Concentracion 5%</option>
+            <option value="1%">Concentracion 1%</option>
+            <option value="0.5%">Concentracion 0.5%</option>
+            <option value="1:10">Dilucion 1:10</option>
+            <option value="1:20">Dilucion 1:20</option>
+            <option value="1:50">Dilucion 1:50</option>
+            <option value="1:100">Dilucion 1:100</option>
+            <option value="1:200">Dilucion 1:200</option>
+          </optgroup>
+          <optgroup label="Hipoclorito NaOCl 6% (Manual HZT)">
+            <option value="hip_200">200 ppm - Areas no criticas (25 ml en 5 L)</option>
+            <option value="hip_500">500 ppm - Areas semicriticas (50 ml en 5 L)</option>
+            <option value="hip_5000">5000 ppm - Areas criticas / derrame sangre (100 ml en 1 L)</option>
+          </optgroup>
+          <optgroup label="ISOCLOR sobres 25 gr (Manual HZT)">
+            <option value="iso_200">200 ppm - Areas admin/generales (1 sobre en 50 L)</option>
+            <option value="iso_500">500 ppm - Salas de internacion (1 sobre en 20 L)</option>
+            <option value="iso_1000">1000 ppm - Areas criticas/aislamientos (1 sobre en 10 L)</option>
+            <option value="iso_5000">5000 ppm - Mat. altamente contaminados (1 sobre en 2 L)</option>
+            <option value="iso_10000">10000 ppm - Fluidos corporales/sangre (1 sobre en 1 L)</option>
+          </optgroup>
+          <optgroup label="Otro">
+            <option value="otra">Otra (especificar)...</option>
+          </optgroup>
+        </select>
+        <div class="dil-info" id="sgaDilInfo"></div>
+        <input id="sgaDilOtra" placeholder="Especificar dilucion o concentracion" style="display:none;margin-top:5px">
+
+        <div class="row">
+          <div>
+            <label><input type="checkbox" id="ckSgaFecha" style="width:auto"> Imprimir fecha de preparacion</label>
+            <input id="sgaDate" type="date" style="margin-top:4px">
+            <p class="small">Si no se marca, imprime espacio en blanco para completar a mano.</p>
+          </div>
+          <div>
+            <label><input type="checkbox" id="ckSgaExp" style="width:auto"> Imprimir fecha de vencimiento</label>
+            <input id="sgaExp" type="date" style="margin-top:4px">
+            <p class="small">Si no se marca, imprime espacio en blanco.</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div><label for="sgaSec">Sector / servicio</label><input id="sgaSec" placeholder="Ej.: Guardia, Office, Farmacia"></div>
+          <div><label for="sgaPrep">Preparo / fracciono</label><input id="sgaPrep" placeholder="Nombre o iniciales"></div>
+        </div>
+        <label for="sgaEnv">Envase autorizado</label>
+        <input id="sgaEnv" placeholder="Ej.: pulverizador rotulado / bidon">
+        <label for="sgaWarn">Advertencia adicional</label>
+        <textarea id="sgaWarn" rows="2">No mezclar con otros productos. No usar si el rotulo esta incompleto o ilegible.</textarea>
+
+        <div class="row">
+          <div><label for="sgaQty">Cantidad de etiquetas</label><input id="sgaQty" type="number" min="1" max="120" value="6"></div>
+          <div><label for="sgaFmt">Formato</label>
+            <select id="sgaFmt">
+              <option value="xl">XL - 1 etiqueta hoja A4 entera (bidon grande / caja)</option>
+              <option value="l">L - 2 etiquetas por hoja A4 (bidon mediano)</option>
+              <option value="4">M - 4 etiquetas por hoja A4</option>
+              <option value="6">S - 6 etiquetas por hoja A4 (2x3)</option>
+              <option value="8">XS - 8 etiquetas por hoja A4 (2x4)</option>
+            </select>
+          </div>
+        </div>
+        <div class="btns">
+          <button onclick="sgaGenerate()">Generar etiquetas</button>
+          <button class="secondary" onclick="window.print()">Imprimir</button>
+          <button class="light" onclick="sgaClear()">Limpiar</button>
+        </div>
+        <div class="notice warn" style="margin-top:12px">Control HyS: validar contra FDS vigente, producto real y procedimiento institucional antes de imprimir.</div>
+      </div>
+    </section>
+
+    <section class="panel preview-panel">
+      <h2>Vista previa</h2>
+      <div class="panel-body">
+        <div id="sga-labels"><div class="empty-state">Selecciona un producto y presiona Generar etiquetas.</div></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+</main>
+
+<script>
+const ADMIN_KEY = 'HYS-HMH';
+const DEFAULT_DB = [{"id": "Y1", "code": "Y1", "title": "Desechos clínicos", "legal": "Desechos clínicos resultantes de la atención médica prestada en hospitales, centros médicos y clínicas para salud humana y animal.", "simple": "Residuos generados durante la atención sanitaria con potencial riesgo biológico/infeccioso.", "examples": "Gasas, apósitos, material descartable contaminado, elementos de curación, residuos de procedimientos asistenciales, material contaminado con fluidos biológicos según POE institucional.", "hazards": "H6.2 Sustancias infecciosas / riesgo biológico. Puede requerir características adicionales según contaminación.", "container": "Bolsa/recipiente autorizado según procedimiento institucional y normativa provincial aplicable. Cerrar antes del traslado interno.", "incompat": "No mezclar con residuos comunes, reciclables, químicos, medicamentos vencidos, líquidos libres ni cortopunzantes sueltos. Cortopunzantes solo en contenedor rígido correspondiente.", "storage": "Mantener cerrado, identificado, sin compactar ni trasvasar. Almacenar en sector de acopio definido, con acceso restringido y retiro según circuito institucional.", "ppe": "Guantes, protección de uniforme/delantal según tarea, protección ocular si hay riesgo de salpicadura. Higiene de manos posterior.", "note": "Separar en origen. No abrir bolsas. No compactar. Ante derrame o rotura: seguir procedimiento ante derrames, registrar en cuaderno de novedades y comunicar al supervisor.", "status": "ACTIVO"}, {"id": "Y2", "code": "Y2", "title": "Producción/preparación farmacéutica", "legal": "Desechos resultantes de la producción y preparación de productos farmacéuticos.", "simple": "Residuos asociados a elaboración o preparación de productos farmacéuticos.", "examples": "Restos o materiales contaminados generados durante preparación farmacéutica, según área competente.", "hazards": "Puede presentar toxicidad, irritación, corrosividad u otra característica según composición.", "container": "Envase/recipiente compatible, cerrado e identificado.", "incompat": "No mezclar con Y1, residuos comunes, ácidos/bases fuertes, oxidantes o solventes salvo compatibilidad definida.", "storage": "Separado por compatibilidad química. Mantener en contención secundaria cuando aplique.", "ppe": "Según FDS del producto involucrado.", "note": "Validar con Farmacia/HyS antes de rotular.", "status": "REVISION"}, {"id": "Y3", "code": "Y3", "title": "Medicamentos y productos farmacéuticos", "pictos": "warning,environment,health", "legal": "Desechos de medicamentos y productos farmacéuticos para la salud humana y animal.", "simple": "Medicamentos vencidos, sobrantes, deteriorados o descartados.", "examples": "Comprimidos, ampollas, frascos, soluciones, medicamentos vencidos o no utilizables. Citostáticos u otros especiales requieren circuito específico.", "hazards": "Toxicidad variable según medicamento. Puede presentar riesgo químico, ambiental o farmacológico.", "container": "Contenedor cerrado, identificado y resistente. Mantener envases originales cuando sea posible.", "incompat": "No mezclar con Y1, residuos comunes, líquidos incompatibles, cortopunzantes sueltos ni químicos de limpieza. No verter en desagües.", "storage": "Almacenar separado, con acceso controlado, protegido de roturas y derrames. Segregar medicamentos especiales según POE.", "ppe": "Guantes. Protección ocular/respiratoria según forma farmacéutica y riesgo de derrame/aerosolización.", "note": "No manipular ni abrir envases innecesariamente. Derivar por circuito institucional.", "status": "ACTIVO"}, {"id": "Y4", "code": "Y4", "title": "Biocidas / desinfectantes", "legal": "Desechos resultantes de la producción, preparación y utilización de biocidas y productos fitosanitarios.", "simple": "Residuos de desinfectantes, biocidas o productos de limpieza/desinfección con peligrosidad química.", "examples": "Restos de lavandina, amonios cuaternarios, desinfectantes concentrados o preparados vencidos, envases contaminados según criterio institucional.", "hazards": "Puede presentar corrosividad, irritación, toxicidad o ecotoxicidad según producto.", "container": "Envase compatible, cerrado, rotulado, con contención secundaria si hay riesgo de derrame.", "incompat": "No mezclar lavandina/hipoclorito con ácidos, amoníaco, amonios, detergentes u otros productos. No mezclar desinfectantes entre sí.", "storage": "Guardar separado de ácidos, bases, oxidantes, combustibles y medicamentos. Mantener ventilado y protegido de calor/luz según FDS.", "ppe": "Guantes. Protección ocular/facial si hay riesgo de salpicadura. Otros EPP según FDS.", "note": "Identificar producto original y concentración si se conoce. Si no se conoce el contenido: NO APTO / contenido dudoso.", "status": "ACTIVO"}, {"id": "Y5", "code": "Y5", "title": "Preservación de madera", "legal": "Desechos resultantes de la fabricación, preparación y utilización de productos químicos para la preservación de la madera.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y6", "code": "Y6", "title": "Disolventes orgánicos", "legal": "Desechos resultantes de la producción, la preparación y la utilización de disolventes orgánicos.", "simple": "Solventes orgánicos usados o descartados.", "examples": "Alcoholes, acetona, 2-butanona, acetato de etilo u otros solventes no halogenados cuando correspondan.", "hazards": "Frecuentemente inflamables; pueden ser irritantes, tóxicos o narcóticos.", "container": "Bidón/envase compatible para solventes, cerrado, con contención secundaria.", "incompat": "No mezclar con oxidantes, ácidos fuertes, bases fuertes, hipoclorito, residuos biológicos ni residuos acuosos incompatibles.", "storage": "Sector ventilado, lejos de fuentes de ignición, calor y chispas. Separar halogenados/no halogenados.", "ppe": "Guantes compatibles, protección ocular, ventilación adecuada; respiratoria si FDS/procedimiento lo indica.", "note": "Mantener lejos de llamas. No verter en desagüe.", "status": "ACTIVO"}, {"id": "Y7", "code": "Y7", "title": "Cianuros por tratamiento térmico", "legal": "Desechos que contengan cianuros, resultantes del tratamiento térmico y las operaciones de temple.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y8", "code": "Y8", "title": "Aceites minerales usados", "legal": "Desechos de aceites minerales no aptos para el uso a que estaban destinados.", "simple": "Aceites minerales usados o contaminados.", "examples": "Aceites de mantenimiento, lubricantes o aceites descartados.", "hazards": "Puede presentar inflamabilidad, toxicidad o contaminación con metales/hidrocarburos.", "container": "Bidón compatible, cerrado, sin pérdidas, con bandeja de contención.", "incompat": "No mezclar con agua, solventes, ácidos, bases, residuos biológicos ni envases de alimentos.", "storage": "Almacenar bajo techo, sobre superficie impermeable, separado de oxidantes y fuentes de ignición.", "ppe": "Guantes resistentes a hidrocarburos y protección ocular ante riesgo de salpicadura.", "note": "No descargar a suelo/desagüe.", "status": "ACTIVO"}, {"id": "Y9", "code": "Y9", "title": "Mezclas aceite/agua o hidrocarburos/agua", "legal": "Mezclas y emulsiones de desecho de aceite y agua o de hidrocarburos y agua.", "simple": "Mezclas/emulsiones contaminadas con aceites o hidrocarburos.", "examples": "Agua con hidrocarburos, emulsiones de mantenimiento o limpieza técnica.", "hazards": "Puede presentar inflamabilidad, ecotoxicidad y liberación de vapores.", "container": "Recipiente compatible, cerrado, con contención secundaria.", "incompat": "No mezclar con oxidantes, ácidos, bases, residuos clínicos ni solventes sin evaluación.", "storage": "Separar de fuentes de ignición. Mantener contención secundaria y evitar derrames.", "ppe": "Guantes resistentes, protección ocular; respiratoria según vapores.", "note": "No verter en desagüe.", "status": "ACTIVO"}, {"id": "Y10", "code": "Y10", "title": "PCB/PCT/PBB", "legal": "Sustancias y artículos de desecho que contengan o estén contaminados por PCB, PCT o PBB.", "simple": "Residuos con bifenilos policlorados u otros contaminantes persistentes específicos.", "examples": "Equipos, aceites o materiales contaminados con PCB/PCT/PBB, si existieran.", "hazards": "Toxicidad crónica y ecotoxicidad persistente.", "container": "Contenedor compatible, cerrado, impermeable, con identificación específica.", "incompat": "No mezclar con otros aceites, solventes, residuos comunes o patogénicos.", "storage": "Acceso restringido, contención secundaria, inventario y gestión por operador habilitado.", "ppe": "Según evaluación específica y FDS/plan de manejo.", "note": "Uso restringido. Requiere gestión específica.", "status": "REVISION"}, {"id": "Y11", "code": "Y11", "title": "Residuos alquitranados", "legal": "Residuos alquitranados resultantes de la refinación, destilación o cualquier otro tratamiento pirolítico.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y12", "code": "Y12", "title": "Tintas / pinturas / pigmentos", "legal": "Desechos resultantes de la producción, preparación y utilización de tintas, colorantes, pigmentos, pinturas, lacas o barnices.", "simple": "Residuos de pinturas, tintas, cartuchos, barnices o pigmentos.", "examples": "Restos de pintura, envases contaminados, tintas o materiales absorbentes contaminados.", "hazards": "Puede contener solventes inflamables, metales o componentes irritantes/ecotóxicos.", "container": "Envase compatible, cerrado, identificado; separar líquidos y sólidos contaminados.", "incompat": "No mezclar con oxidantes, ácidos/bases, residuos biológicos ni residuos comunes.", "storage": "Separar de calor/fuentes de ignición si contiene solventes. Mantener cerrado.", "ppe": "Guantes y protección ocular. Ventilación si hay vapores.", "note": "No verter en desagüe.", "status": "ACTIVO"}, {"id": "Y13", "code": "Y13", "title": "Resinas / látex / plastificantes / adhesivos", "legal": "Desechos resultantes de la producción, preparación y utilización de resinas, látex, plastificantes o colas y adhesivos.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y14", "code": "Y14", "title": "Químicos no identificados / I+D / enseñanza", "legal": "Sustancias químicas de desecho, no identificadas o nuevas, resultantes de la investigación y el desarrollo o de las actividades de enseñanza y cuyos efectos en el ser humano o el medio ambiente no se conozcan.", "simple": "Residuo químico desconocido o no identificado.", "examples": "Frascos sin identificación, mezclas de laboratorio desconocidas, residuos sin FDS o sin composición clara.", "hazards": "Peligro desconocido. Tratar como residuo de riesgo elevado hasta identificación.", "container": "Mantener en envase original si existe, cerrar, aislar y rotular como DESCONOCIDO/NO MANIPULAR.", "incompat": "No mezclar con ningún otro residuo. No abrir. No trasvasar. No oler. No neutralizar.", "storage": "Aislar en contención secundaria, acceso restringido, avisar a HyS/responsable técnico.", "ppe": "No manipular salvo personal autorizado. EPP según evaluación.", "note": "Contenido dudoso = NO APTO PARA USO. Requiere identificación antes de tratamiento.", "status": "ACTIVO"}, {"id": "Y15", "code": "Y15", "title": "Desechos explosivos", "legal": "Desechos de carácter explosivo que no estén sometidos a una legislación diferente.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y16", "code": "Y16", "title": "Químicos fotográficos", "legal": "Desechos resultantes de la producción, preparación y utilización de productos químicos y materiales para fines fotográficos.", "simple": "Reveladores, fijadores u otros residuos fotográficos/radiológicos si existieran.", "examples": "Fijador/revelador usado, soluciones fotográficas, materiales contaminados.", "hazards": "Puede contener plata, sustancias corrosivas o ecotóxicas.", "container": "Bidón compatible, cerrado, identificado, separado por tipo de solución.", "incompat": "No mezclar revelador con fijador si el procedimiento no lo autoriza. No mezclar con ácidos/bases fuertes, oxidantes ni residuos biológicos.", "storage": "Mantener cerrado, en contención secundaria, lejos de calor y fuentes incompatibles.", "ppe": "Guantes y protección ocular.", "note": "Revisar gestión específica con operador habilitado.", "status": "ACTIVO"}, {"id": "Y17", "code": "Y17", "title": "Tratamiento de superficies", "legal": "Desechos resultantes del tratamiento de superficies de metales y plásticos.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y18", "code": "Y18", "title": "Operaciones de eliminación", "legal": "Residuos resultantes de las operaciones de eliminación de desechos industriales.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y19", "code": "Y19", "title": "Metales carbonilos", "legal": "Metales carbonilos.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y20", "code": "Y20", "title": "Berilio", "legal": "Berilio, compuesto de berilio.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y21", "code": "Y21", "title": "Compuestos de cromo hexavalente", "legal": "Compuestos de cromo hexavalente.", "simple": "Residuos que contienen Cr(VI).", "examples": "Óxido de cromo(VI), soluciones o sólidos contaminados con cromo hexavalente.", "hazards": "Toxicidad, carcinogenicidad, sensibilización, oxidante, ecotoxicidad según composición.", "container": "Envase compatible, cerrado, con contención secundaria, identificación específica de Cr(VI).", "incompat": "No mezclar con orgánicos, solventes, reductores, combustibles, ácidos/bases sin evaluación.", "storage": "Separar de inflamables, orgánicos y reductores. Acceso restringido.", "ppe": "Guantes, protección ocular/facial, ropa de protección. Respiratoria si hay polvo/aerosol según evaluación.", "note": "Residuo de alta peligrosidad. Requiere circuito específico.", "status": "ACTIVO"}, {"id": "Y22", "code": "Y22", "title": "Cobre", "legal": "Compuestos de cobre.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y23", "code": "Y23", "title": "Zinc", "legal": "Compuestos de zinc.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y24", "code": "Y24", "title": "Arsénico", "legal": "Arsénico, compuestos de arsénico.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y25", "code": "Y25", "title": "Selenio", "legal": "Selenio, compuestos de selenio.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y26", "code": "Y26", "title": "Cadmio", "legal": "Cadmio, compuestos de cadmio.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y27", "code": "Y27", "title": "Antimonio", "legal": "Antimonio, compuestos de antimonio.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y28", "code": "Y28", "title": "Telurio", "legal": "Telurio, compuestos de telurio.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y29", "code": "Y29", "title": "Mercurio / compuestos de mercurio", "legal": "Mercurio, compuestos de mercurio.", "simple": "Residuos con mercurio o contaminados con mercurio.", "examples": "Termómetros rotos, amalgamas, equipos o materiales contaminados con Hg, si existieran.", "hazards": "Toxicidad crónica, vapores peligrosos, ecotoxicidad.", "container": "Recipiente hermético compatible, preferentemente doble contención. No aspirar con aspiradora común.", "incompat": "No mezclar con residuos comunes, biológicos, solventes, ácidos, bases ni residuos metálicos no evaluados.", "storage": "Contención secundaria, ventilación, acceso restringido, evitar roturas y dispersión.", "ppe": "Guantes, protección ocular; respiratoria/equipo específico según derrame.", "note": "Ante derrame: aislar y avisar a HyS. No barrer ni aspirar.", "status": "ACTIVO"}, {"id": "Y30", "code": "Y30", "title": "Talio", "legal": "Talio, compuestos de talio.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y31", "code": "Y31", "title": "Plomo / compuestos de plomo", "legal": "Plomo, compuestos de plomo.", "simple": "Residuos con plomo o compuestos de plomo.", "examples": "Cloruro de plomo, residuos de baterías o materiales contaminados con plomo según área.", "hazards": "Toxicidad crónica, reproducción, ecotoxicidad.", "container": "Recipiente resistente, cerrado, identificado, evitando polvo.", "incompat": "No mezclar con residuos comunes, biológicos, ácidos/bases sin evaluación ni otros metales sin segregación.", "storage": "Almacenar cerrado, seco, con control de polvo y acceso restringido.", "ppe": "Guantes. Protección respiratoria si hay polvo según evaluación.", "note": "Evitar generar polvo. Lavado de manos posterior.", "status": "ACTIVO"}, {"id": "Y32", "code": "Y32", "title": "Flúor inorgánico", "legal": "Compuestos inorgánicos de flúor, con exclusión de fluoruro cálcico.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y33", "code": "Y33", "title": "Cianuros inorgánicos", "legal": "Cianuros inorgánicos.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y34", "code": "Y34", "title": "Soluciones ácidas / ácidos sólidos", "legal": "Soluciones ácidas o ácidos en forma sólida.", "simple": "Ácidos líquidos o sólidos descartados.", "examples": "Ácido clorhídrico, ácido sulfúrico, ácido acético u otros ácidos descartados.", "hazards": "Corrosivo; puede reaccionar con bases, metales, hipocloritos o cianuros liberando gases peligrosos.", "container": "Envase compatible para ácidos, cerrado, con bandeja de contención.", "incompat": "No mezclar con bases, hipoclorito/lavandina, cianuros, sulfuros, metales reactivos, solventes u oxidantes sin evaluación.", "storage": "Separar de bases y productos clorados. Mantener cerca del suelo, con contención secundaria y ventilación.", "ppe": "Guantes compatibles, protección ocular/facial, delantal resistente a químicos.", "note": "No neutralizar salvo procedimiento autorizado.", "status": "ACTIVO"}, {"id": "Y35", "code": "Y35", "title": "Soluciones básicas / bases sólidas", "legal": "Soluciones básicas o bases en forma sólida.", "simple": "Bases/álcalis líquidos o sólidos descartados.", "examples": "Amoníaco, soda cáustica u otras bases descartadas.", "hazards": "Corrosivo/irritante; puede liberar vapores tóxicos o reaccionar con ácidos.", "container": "Envase compatible para bases, cerrado, con contención secundaria.", "incompat": "No mezclar con ácidos, hipoclorito/lavandina, sales de amonio incompatibles, metales reactivos o residuos biológicos.", "storage": "Separar de ácidos. Mantener ventilado, cerrado y con contención secundaria.", "ppe": "Guantes compatibles, protección ocular/facial, delantal resistente a químicos.", "note": "No neutralizar salvo procedimiento autorizado.", "status": "ACTIVO"}, {"id": "Y36", "code": "Y36", "title": "Asbestos", "legal": "Asbestos (polvo y fibras).", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y37", "code": "Y37", "title": "Fósforo orgánico", "legal": "Compuestos orgánicos de fósforo.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y38", "code": "Y38", "title": "Cianuros orgánicos", "legal": "Cianuros orgánicos.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y39", "code": "Y39", "title": "Fenoles", "legal": "Fenoles, compuestos fenólicos, con inclusión de clorofenoles.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y40", "code": "Y40", "title": "Éteres", "legal": "Eteres.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y41", "code": "Y41", "title": "Solventes orgánicos halogenados", "legal": "Solventes orgánicos halogenados.", "simple": "Residuos de solventes con cloro/bromo/flúor u otro halógeno.", "examples": "Triclorometano/cloroformo, clorobenceno u otros solventes halogenados.", "hazards": "Toxicidad aguda/crónica, vapores peligrosos, posible ecotoxicidad.", "container": "Bidón compatible para solventes halogenados, cerrado, con contención secundaria.", "incompat": "No mezclar con solventes no halogenados, oxidantes, bases fuertes, ácidos fuertes, hipoclorito ni residuos biológicos.", "storage": "Ventilado, fresco, lejos de calor. Separar de inflamables no halogenados y oxidantes.", "ppe": "Guantes compatibles, protección ocular, ventilación/extracción. Respiratoria si procedimiento lo indica.", "note": "No verter en desagüe. Mantener segregación halogenado/no halogenado.", "status": "ACTIVO"}, {"id": "Y42", "code": "Y42", "title": "Disolventes orgánicos no halogenados", "legal": "Disolventes orgánicos, con exclusión de disolventes halogenados.", "simple": "Solventes orgánicos sin halógenos.", "examples": "Etanol, propanol, isopropanol, acetona, 2-butanona, acetato de etilo, hexano, tolueno, xilenos, etilbenceno, cuando correspondan.", "hazards": "Frecuentemente inflamables; vapores irritantes o narcóticos; toxicidad variable.", "container": "Bidón compatible para solventes no halogenados, cerrado, con contención secundaria.", "incompat": "No mezclar con halogenados, oxidantes, ácidos/bases fuertes, hipoclorito, residuos biológicos ni agua si no corresponde.", "storage": "Lejos de fuentes de ignición, calor, chispas y oxidantes. Sector ventilado.", "ppe": "Guantes compatibles, protección ocular, ventilación/extracción.", "note": "No verter en desagüe. Mantener segregación halogenado/no halogenado.", "status": "ACTIVO"}, {"id": "Y43", "code": "Y43", "title": "Dibenzofuranos policlorados", "legal": "Cualquier sustancia del grupo de los dibenzofuranos policlorados.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y44", "code": "Y44", "title": "Dibenzoparadioxinas policloradas", "legal": "Cualquier sustancia del grupo de las dibenzoparadioxinas policloradas.", "simple": "Categoría sometida a control según Ley 24.051. Completar criterios específicos con HyS/FDS/procedimiento.", "examples": "[Completar según residuo real generado]", "hazards": "[Definir características peligrosas H según composición: Anexo II Ley 24.051 y evaluación técnica]", "container": "Recipiente compatible, cerrado e identificado. Completar según residuo real.", "incompat": "No mezclar con residuos comunes, Y1, reciclables ni sustancias incompatibles. Validar incompatibilidades específicas antes de combinar.", "storage": "Almacenamiento separado, identificado, con contención secundaria si aplica y acceso restringido.", "ppe": "Definir según composición/FDS/evaluación HyS.", "note": "Registro pendiente de parametrización institucional.", "status": "REVISION"}, {"id": "Y45", "code": "Y45", "title": "Compuestos organohalogenados", "legal": "Compuestos organohalogenados, que no sean las sustancias mencionadas en el Anexo I.", "simple": "Residuos con compuestos orgánicos halogenados no encuadrados en otra categoría específica.", "examples": "Materiales contaminados con compuestos organoclorados/organohalogenados.", "hazards": "Toxicidad variable, posible persistencia/ecotoxicidad.", "container": "Envase compatible, cerrado, identificado, con contención secundaria.", "incompat": "No mezclar con no halogenados, oxidantes, bases fuertes, residuos biológicos ni residuos comunes.", "storage": "Separado, ventilado, con acceso controlado.", "ppe": "Según FDS del constituyente.", "note": "Validar composición antes de gestionar.", "status": "ACTIVO"}, {"id": "Y48", "code": "Y48", "title": "Materiales contaminados con residuos peligrosos", "legal": "Materiales y elementos contaminados con residuos peligrosos identificados en el Anexo I o que presenten características peligrosas del Anexo II, destinados a operación de eliminación.", "simple": "Envases, trapos, filtros, EPP, absorbentes o materiales contaminados con residuos peligrosos.", "examples": "Envases contaminados, paños absorbentes, filtros, guantes, prendas o materiales contaminados con químicos peligrosos.", "hazards": "Depende del contaminante. Mantener la misma peligrosidad del residuo que lo contaminó.", "container": "Bolsa/recipiente compatible y cerrado. Identificar contaminante principal.", "incompat": "No mezclar materiales contaminados con residuos comunes, Y1, reciclables ni residuos con sustancias incompatibles.", "storage": "Separar por contaminante principal. Evitar evaporación, derrame o contacto accidental.", "ppe": "Según contaminante principal.", "note": "Indicar siempre qué sustancia o corriente contaminó el material.", "status": "ACTIVO"}];
+const PRODUCTS = [{"name": "HIPOCLORITO DE SODIO (desinfectante)", "cas": "7681-52-9", "signal": "PELIGRO", "ghs": ["GHS05", "GHS07"], "h": ["H290 - Puede ser corrosivo para metales.", "H314 - Provoca quemaduras en piel y lesiones oculares.", "H335 - Puede irritar las vias respiratorias.", "H400 - Toxico para organismos acuaticos."], "p": ["P260 - No respirar vapores.", "P273 - No dispersar en el medio ambiente.", "P280 - Usar guantes y proteccion ocular.", "P301+P330+P331 - EN CASO DE INGESTION: enjuagar boca, NO provocar vomito.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar con agua varios minutos."], "source": "FDS_HIPOCLORITO_SODIO.pdf"}, {"name": "1-PROPANOL", "cas": "71-23-8", "signal": "PELIGRO", "ghs": ["GHS02", "GHS05", "GHS07"], "h": ["H225 - Liquido y vapores muy inflamables.", "H318 - Provoca lesiones oculares graves.", "H336 - Puede provocar somnolencia o vertigo."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P261 - Evitar respirar vapores.", "P280 - Usar guantes y proteccion ocular.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar."], "source": "FDS_1-PROPANOL.pdf"}, {"name": "2-PROPANOL", "cas": "67-63-0", "signal": "PELIGRO", "ghs": ["GHS02", "GHS07"], "h": ["H225 - Liquido y vapores muy inflamables.", "H319 - Provoca irritacion ocular grave.", "H336 - Puede provocar somnolencia o vertigo."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P261 - Evitar respirar vapores.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar."], "source": "FDS_2-PROPANOL.pdf"}, {"name": "2-BUTANONA (MEK)", "cas": "78-93-3", "signal": "PELIGRO", "ghs": ["GHS02", "GHS07"], "h": ["H225 - Liquido y vapores muy inflamables.", "H319 - Provoca irritacion ocular grave.", "H336 - Puede provocar somnolencia o vertigo."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P261 - Evitar respirar vapores.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar."], "source": "FDS_2-BUTANONA.pdf"}, {"name": "ACETONA", "cas": "67-64-1", "signal": "PELIGRO", "ghs": ["GHS02", "GHS07"], "h": ["H225 - Liquido y vapores muy inflamables.", "H319 - Provoca irritacion ocular grave.", "H336 - Puede provocar somnolencia o vertigo."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P280 - Usar proteccion ocular.", "P304+P340 - EN CASO DE INHALACION: llevar al aire libre.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar."], "source": "FDS_ACETONA.pdf"}, {"name": "ACIDO ACETICO", "cas": "64-19-7", "signal": "PELIGRO", "ghs": ["GHS02", "GHS05"], "h": ["H226 - Liquido y vapores inflamables.", "H314 - Provoca quemaduras graves en piel y lesiones oculares."], "p": ["P280 - Usar guantes y proteccion ocular.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar.", "P310 - Llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_ACIDO_ACETICO.pdf"}, {"name": "ACIDO CLORHIDRICO", "cas": "7647-01-0", "signal": "PELIGRO", "ghs": ["GHS05", "GHS07"], "h": ["H290 - Puede ser corrosivo para metales.", "H314 - Provoca quemaduras graves en piel y lesiones oculares.", "H335 - Puede irritar las vias respiratorias."], "p": ["P261 - Evitar respirar vapores.", "P280 - Usar guantes y proteccion ocular.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar.", "P310 - Llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_ACIDO_CLORHIDRICO.pdf"}, {"name": "ACIDO SULFURICO", "cas": "7664-93-9", "signal": "PELIGRO", "ghs": ["GHS05"], "h": ["H290 - Puede ser corrosivo para metales.", "H314 - Provoca quemaduras graves en piel y lesiones oculares."], "p": ["P280 - Usar guantes y proteccion ocular.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar.", "P310 - Llamar a un medico."], "source": "FDS_ACIDO_SULFURICO.pdf"}, {"name": "AMONIACO", "cas": "7664-41-7", "signal": "PELIGRO", "ghs": ["GHS05", "GHS06", "GHS09"], "h": ["H221 - Gas inflamable.", "H314 - Provoca quemaduras graves en piel y lesiones oculares.", "H331 - Toxico si se inhala.", "H410 - Muy toxico para organismos acuaticos."], "p": ["P261 - Evitar respirar gases.", "P273 - No dispersar en el medio ambiente.", "P280 - Usar guantes y proteccion ocular.", "P310 - Llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_AMONIACO.pdf"}, {"name": "ETANOL", "cas": "64-17-5", "signal": "PELIGRO", "ghs": ["GHS02", "GHS07"], "h": ["H225 - Liquido y vapores muy inflamables.", "H319 - Provoca irritacion ocular grave."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P280 - Usar proteccion ocular.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar."], "source": "FDS_ETANOL.pdf"}, {"name": "METANOL", "cas": "67-56-1", "signal": "PELIGRO", "ghs": ["GHS02", "GHS06", "GHS08"], "h": ["H225 - Liquido y vapores muy inflamables.", "H301 - Toxico en caso de ingestion.", "H311 - Toxico en contacto con piel.", "H331 - Toxico si se inhala.", "H370 - Provoca danos en los organos."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P260 - No respirar vapores.", "P280 - Usar guantes y proteccion ocular.", "P301+P310 - EN CASO DE INGESTION: llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_METANOL.pdf"}, {"name": "FORMALDEHIDO", "cas": "50-00-0", "signal": "PELIGRO", "ghs": ["GHS02", "GHS06", "GHS08"], "h": ["H228 - Solido inflamable.", "H301 - Toxico en caso de ingestion.", "H311 - Toxico en contacto con piel.", "H314 - Provoca quemaduras graves en piel y lesiones oculares.", "H331 - Toxico si se inhala.", "H341 - Se sospecha que provoca defectos geneticos.", "H350 - Puede provocar cancer."], "p": ["P260 - No respirar vapores.", "P280 - EPP completo obligatorio.", "P301+P330+P331 - EN CASO DE INGESTION: enjuagar boca, NO provocar vomito.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos.", "P310 - Llamar INMEDIATAMENTE a CENTRO DE TOXICOLOGIA: 0800-333-0160."], "source": "FDS_FORMALDEHIDO.pdf"}, {"name": "GLUTARALDEHIDO", "cas": "111-30-8", "signal": "PELIGRO", "ghs": ["GHS05", "GHS06", "GHS08", "GHS09"], "h": ["H302 - Nocivo en caso de ingestion.", "H311 - Toxico en contacto con piel.", "H314 - Provoca quemaduras graves en piel y lesiones oculares.", "H317 - Puede provocar reaccion alergica en piel.", "H330 - Mortal en caso de inhalacion.", "H334 - Puede provocar sintomas de alergia en caso de inhalacion.", "H400 - Muy toxico para organismos acuaticos."], "p": ["P260 - No respirar vapores.", "P272 - Las prendas contaminadas no podran salir del lugar de trabajo.", "P273 - No dispersar en el medio ambiente.", "P280 - EPP completo obligatorio: guantes, antiparras, proteccion respiratoria.", "P284 - Usar proteccion respiratoria.", "P310 - Llamar INMEDIATAMENTE a CENTRO DE TOXICOLOGIA."], "source": "FDS_GLUTARALDEHIDO.pdf"}, {"name": "OXIDO DE ETILENO", "cas": "75-21-8", "signal": "PELIGRO", "ghs": ["GHS02", "GHS06", "GHS08"], "h": ["H220 - Gas extremadamente inflamable.", "H331 - Toxico si se inhala.", "H340 - Puede provocar defectos geneticos.", "H350 - Puede provocar cancer."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P260 - No respirar gases.", "P281 - Usar EPP requerido.", "P311 - Llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_OXIDO_ETILENO.pdf"}, {"name": "TRICLOROMETANO (Cloroformo)", "cas": "67-66-3", "signal": "PELIGRO", "ghs": ["GHS06", "GHS08"], "h": ["H302 - Nocivo en caso de ingestion.", "H315 - Provoca irritacion cutanea.", "H331 - Toxico si se inhala.", "H351 - Susceptible de provocar cancer.", "H361 - Susceptible de perjudicar la fertilidad.", "H372 - Provoca danos en organos por exposicion prolongada."], "p": ["P260 - No respirar vapores.", "P280 - Usar guantes y proteccion ocular.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar.", "P311 - Llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_TRICLOROMETANO.pdf"}, {"name": "TOLUENO", "cas": "108-88-3", "signal": "PELIGRO", "ghs": ["GHS02", "GHS07", "GHS08"], "h": ["H225 - Liquido y vapores muy inflamables.", "H304 - Puede ser mortal si se ingiere y pasa a vias respiratorias.", "H315 - Provoca irritacion cutanea.", "H336 - Puede provocar somnolencia o vertigo.", "H361 - Susceptible de perjudicar la fertilidad o el feto.", "H373 - Puede provocar danos en organos por exposicion prolongada."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P260 - No respirar vapores.", "P280 - Usar guantes y proteccion ocular.", "P301+P310 - EN CASO DE INGESTION: llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_TOLUENO.pdf"}, {"name": "BENCENO", "cas": "71-43-2", "signal": "PELIGRO", "ghs": ["GHS02", "GHS07", "GHS08"], "h": ["H225 - Liquido y vapores muy inflamables.", "H304 - Puede ser mortal si se ingiere y pasa a vias respiratorias.", "H315 - Provoca irritacion cutanea.", "H319 - Provoca irritacion ocular grave.", "H340 - Puede provocar defectos geneticos.", "H350 - Puede provocar cancer.", "H372 - Provoca danos en organos por exposicion prolongada."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P260 - No respirar vapores.", "P280 - EPP completo obligatorio.", "P301+P310 - EN CASO DE INGESTION: llamar INMEDIATAMENTE a CENTRO DE TOXICOLOGIA."], "source": "FDS_BENCENO.pdf"}, {"name": "n-HEXANO", "cas": "110-54-3", "signal": "PELIGRO", "ghs": ["GHS02", "GHS07", "GHS08"], "h": ["H225 - Liquido y vapores muy inflamables.", "H304 - Puede ser mortal si se ingiere y pasa a vias respiratorias.", "H315 - Provoca irritacion cutanea.", "H336 - Puede provocar somnolencia o vertigo.", "H361 - Susceptible de perjudicar la fertilidad.", "H373 - Puede provocar danos en el sistema nervioso periferico."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P260 - No respirar vapores.", "P280 - Usar guantes y proteccion ocular.", "P301+P310 - EN CASO DE INGESTION: llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_n-HEXANO.pdf"}, {"name": "XILENOS", "cas": "1330-20-7", "signal": "PELIGRO", "ghs": ["GHS02", "GHS07", "GHS08"], "h": ["H226 - Liquido y vapores inflamables.", "H304 - Puede ser mortal si se ingiere y pasa a vias respiratorias.", "H312 - Nocivo en contacto con piel.", "H315 - Provoca irritacion cutanea.", "H332 - Nocivo en caso de inhalacion."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P260 - No respirar vapores.", "P280 - Usar guantes y proteccion ocular."], "source": "FDS_XILENOS.pdf"}, {"name": "CLOROBENCENO", "cas": "108-90-7", "signal": "PELIGRO", "ghs": ["GHS02", "GHS07", "GHS08"], "h": ["H226 - Liquido y vapores inflamables.", "H304 - Puede ser mortal si se ingiere y pasa a vias respiratorias.", "H315 - Provoca irritacion cutanea.", "H332 - Nocivo en caso de inhalacion.", "H411 - Toxico para organismos acuaticos."], "p": ["P210 - Mantener alejado de fuentes de ignicion.", "P260 - No respirar vapores.", "P273 - No dispersar en el medio ambiente.", "P280 - Usar guantes y proteccion ocular."], "source": "FDS_CLOROBENCENO.pdf"}, {"name": "ACIDO NITRICO", "cas": "7697-37-2", "signal": "PELIGRO", "ghs": ["GHS03", "GHS05", "GHS07"], "h": ["H272 - Puede agravar un incendio; comburente.", "H290 - Puede ser corrosivo para metales.", "H314 - Provoca quemaduras graves en piel y lesiones oculares.", "H331 - Toxico si se inhala."], "p": ["P210 - Mantener alejado de materiales combustibles.", "P260 - No respirar vapores.", "P280 - EPP completo.", "P310 - Llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_ACIDO_NITRICO.pdf"}, {"name": "HIDROXIDO DE SODIO (Soda caustica)", "cas": "1310-73-2", "signal": "PELIGRO", "ghs": ["GHS05"], "h": ["H290 - Puede ser corrosivo para metales.", "H314 - Provoca quemaduras graves en piel y lesiones oculares graves."], "p": ["P260 - No respirar polvo/vapores.", "P280 - Usar guantes y proteccion ocular/facial.", "P301+P330+P331 - EN CASO DE INGESTION: enjuagar boca, NO provocar vomito.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos.", "P310 - Llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_HIDROXIDO_SODIO.pdf"}, {"name": "PERMANGANATO DE POTASIO", "cas": "7722-64-7", "signal": "PELIGRO", "ghs": ["GHS03", "GHS05", "GHS07", "GHS09"], "h": ["H272 - Puede agravar un incendio; comburente.", "H302 - Nocivo en caso de ingestion.", "H314 - Provoca quemaduras graves en piel y lesiones oculares.", "H410 - Muy toxico para organismos acuaticos."], "p": ["P210 - Mantener alejado de materiales combustibles.", "P273 - No dispersar en el medio ambiente.", "P280 - Usar guantes y proteccion ocular.", "P310 - Llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_PERMANGANATO_K.pdf"}, {"name": "AGUA OXIGENADA (Peroxido de hidrogeno)", "cas": "7722-84-1", "signal": "PELIGRO", "ghs": ["GHS03", "GHS05", "GHS07", "GHS08"], "h": ["H271 - Puede provocar incendio o explosion; comburente fuerte.", "H302 - Nocivo en caso de ingestion.", "H314 - Provoca quemaduras graves en piel y lesiones oculares.", "H332 - Nocivo en caso de inhalacion.", "H335 - Puede irritar las vias respiratorias.", "H351 - Susceptible de provocar cancer."], "p": ["P210 - Mantener alejado de calor y materiales combustibles.", "P260 - No respirar vapores.", "P280 - EPP completo.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos.", "P310 - Llamar a CENTRO DE TOXICOLOGIA."], "source": "FDS_AGUA_OXIGENADA.pdf"}, {"name": "SULFATO DE COBRE", "cas": "7758-98-7", "signal": "ATENCION", "ghs": ["GHS07", "GHS09"], "h": ["H302 - Nocivo en caso de ingestion.", "H318 - Provoca lesiones oculares graves.", "H400 - Muy toxico para organismos acuaticos.", "H410 - Muy toxico para organismos acuaticos con efectos duraderos."], "p": ["P260 - No respirar polvo.", "P273 - No dispersar en el medio ambiente.", "P280 - Usar guantes y proteccion ocular.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos."], "source": "FDS_SULFATO_COBRE.pdf"}, {"name": "CLORURO DE SODIO (Soluciones concentradas)", "cas": "7647-14-5", "signal": "ATENCION", "ghs": ["GHS07"], "h": ["H319 - Provoca irritacion ocular grave en soluciones concentradas."], "p": ["P264 - Lavarse manos concienzudamente tras la manipulacion.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar con agua varios minutos."], "source": "FDS_CLORURO_SODIO.pdf"}, {"name": "DETERGENTE ENZIMATICO (uso instrumental)", "cas": "N/A", "signal": "ATENCION", "ghs": ["GHS07"], "h": ["H315 - Provoca irritacion cutanea.", "H319 - Provoca irritacion ocular grave.", "H334 - Puede provocar sintomas de alergia en caso de inhalacion."], "p": ["P261 - Evitar respirar aerosoles.", "P280 - Usar guantes y proteccion ocular.", "P302+P352 - EN CASO DE CONTACTO CON PIEL: lavar con agua y jabon.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos."], "source": "FDS_DETERGENTE_ENZIMATICO.pdf"}, {"name": "AGUA DESTILADA / BIDESTILADA", "cas": "7732-18-5", "signal": "SIN PELIGRO", "ghs": [], "h": [], "p": ["P264 - Mantener limpio el area de trabajo."], "source": "FDS_AGUA_DESTILADA.pdf"}, {"name": "ISOCLOR (Hipoclorito en polvo)", "cas": "N/A", "signal": "PELIGRO", "ghs": ["GHS05", "GHS07", "GHS09"], "h": ["H290 - Puede ser corrosivo para metales.", "H314 - Provoca quemaduras en piel y lesiones oculares.", "H335 - Puede irritar las vias respiratorias.", "H400 - Toxico para organismos acuaticos."], "p": ["P260 - No respirar polvo/vapores.", "P273 - No dispersar en el medio ambiente.", "P280 - Usar guantes y proteccion ocular.", "P302+P352 - EN CASO DE CONTACTO CON PIEL: lavar con agua abundante.", "P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar con agua varios minutos."], "source": "FDS_ISOCLOR.pdf"}];
+const LOGOS = {"HMH": "data:image/jpeg;base64,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", "HZT": "data:image/jpeg;base64,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", "HSST": "data:image/png;base64,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"};
+
+const HOSP_KEYS = {
+  'HMH':'HMH','HZT':'HZT','HZT-CIT':'HZT','HZT-CD':'HZT','HZT-HC':'HZT',
+  'HZT-CT':'HZT','HZT-EA':'HZT','HZT-PA':'HZT','HZT-AMAYA':'HZT','HZT-CONST':'HZT',
+  'HZT-COR':'HZT','HZT-DB':'HZT','HZT-ETC':'HZT','HZT-LL':'HZT','HZT-PG':'HZT',
+  'HZT-FR':'HZT','HZT-SAR':'HZT','HZT-TF':'HZT','HZT-VI':'HZT',
+  'HSST':'HSST','HSST-CC':'HSST','HSST-A16':'HSST','HSST-SN':'HSST',
+  'HSST-GM':'HSST','HSST-490':'HSST','HSST-RC':'HSST'
+};
+
+const GHS_META = {
+  GHS01:['01','Explosivo'],GHS02:['02','Inflamable'],GHS03:['03','Comburente'],
+  GHS04:['04','Gas presion'],GHS05:['05','Corrosivo'],GHS06:['06','Toxico agudo'],
+  GHS07:['07','Irritante'],GHS08:['08','Peligro salud'],GHS09:['09','Peligro ambiental']
+};
+
+const DIL_INFO = {
+  hip_200:'Hipoclorito 6% - Areas NO criticas<br>Preparacion: 25 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs. Conservar en envase opaco cerrado.',
+  hip_500:'Hipoclorito 6% - Areas SEMICRITICAS<br>Preparacion: 50 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs.',
+  hip_5000:'Hipoclorito 6% - AREAS CRITICAS / Derrame sangre o fluidos<br>Preparacion: 100 ml de lavandina en 1 L de agua FRIA<br>ALTA CONCENTRACION. EPP obligatorio. NO mezclar con agua caliente.',
+  iso_200:'ISOCLOR 200 ppm - Areas admin/generales<br>Preparacion: 1 sobre 25 gr en 50 L. Reposar minimo 1 hora antes de usar.',
+  iso_500:'ISOCLOR 500 ppm - Salas de internacion<br>Preparacion: 1 sobre 25 gr en 20 L. Reposar minimo 1 hora.',
+  iso_1000:'ISOCLOR 1000 ppm - Areas criticas / aislamientos<br>Preparacion: 1 sobre 25 gr en 10 L. Reposar minimo 1 hora.',
+  iso_5000:'ISOCLOR 5000 ppm - Materiales altamente contaminados<br>Preparacion: 1 sobre 25 gr en 2 L. EPP completo obligatorio.',
+  iso_10000:'ISOCLOR 10000 ppm - Fluidos corporales / sangre<br>Preparacion: 1 sobre 25 gr en 1 L. MAXIMA CONCENTRACION. EPP completo + respirador N95.'
+};
+
+const DIL_OVERRIDE = {
+  hip_200:{label:'200 ppm NaOCl - Area no critica',signal:'ATENCION',ghs:['GHS07'],
+    h:['H315 - Puede provocar irritacion cutanea leve en contacto prolongado.','H319 - Puede provocar irritacion ocular leve.','H400 - Nocivo para organismos acuaticos. No verter en desague.'],
+    p:['P260 - Evitar respirar vapores. Usar en area ventilada.','P273 - No dispersar en el medio ambiente.','P280 - Usar guantes de goma domesticos.','P305+P351 - EN CASO DE CONTACTO CON OJOS: enjuagar con agua abundante.','P501 - Eliminar segun normativa institucional.'],
+    epp:'Guantes de goma. Lavado de manos posterior.',nota:'Preparar con agua FRIA. No mezclar con detergente. Usar dentro de las 24 hs.'},
+  hip_500:{label:'500 ppm NaOCl - Area semicritica',signal:'ATENCION',ghs:['GHS05','GHS07'],
+    h:['H315 - Provoca irritacion cutanea en contacto prolongado.','H319 - Provoca irritacion ocular.','H335 - Puede irritar las vias respiratorias.','H400 - Nocivo para organismos acuaticos.'],
+    p:['P260 - No respirar vapores.','P271 - Utilizar en areas bien ventiladas.','P273 - No dispersar en el medio ambiente.','P280 - Guantes de goma y proteccion ocular si hay salpicadura.','P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar con agua varios minutos.'],
+    epp:'Guantes de goma resistentes. Proteccion ocular ante salpicadura. Ventilacion adecuada.',nota:'Preparar con agua FRIA. NUNCA mezclar con detergente ni amoniaco (gases toxicos). Usar dentro de las 24 hs.'},
+  hip_5000:{label:'5000 ppm NaOCl - Area critica / Derrame sangre',signal:'PELIGRO',ghs:['GHS05','GHS07','GHS09'],
+    h:['H290 - Puede ser corrosivo para metales.','H314 - Provoca quemaduras en piel y lesiones oculares graves.','H335 - Irrita las vias respiratorias.','H400 - Muy nocivo para organismos acuaticos.'],
+    p:['P260 - No respirar vapores. Uso en areas ventiladas.','P271 - Utilizar solo en exteriores o con ventilacion forzada.','P273 - No dispersar en el medio ambiente.','P280 - EPP COMPLETO OBLIGATORIO: guantes, antiparras, delantal.','P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos. Consultar medico.','P310 - Llamar a CENTRO DE TOXICOLOGIA: 0800-333-0160.'],
+    epp:'EPP COMPLETO: Guantes resistentes goma/PVC. Antiparras. Delantal impermeable. Barbijo si area cerrada.',nota:'ALTA CONCENTRACION. Preparar con agua FRIA. NUNCA mezclar con detergente, amoniaco ni acidos. Usar dentro de las 24 hs.'},
+  iso_200:{label:'ISOCLOR 200 ppm - Areas generales',signal:'ATENCION',ghs:['GHS07'],
+    h:['H315 - Puede provocar irritacion cutanea leve.','H319 - Puede provocar irritacion ocular leve.','H400 - Nocivo para organismos acuaticos.'],
+    p:['P260 - Evitar respirar vapores.','P273 - No dispersar en el medio ambiente.','P280 - Guantes de goma domesticos.','P305+P351 - EN CASO DE CONTACTO CON OJOS: enjuagar con agua abundante.'],
+    epp:'Guantes de goma domesticos. Lavado de manos posterior.',nota:'1 sobre 25 gr en 50 L. Reposar 1 hora antes de usar.'},
+  iso_500:{label:'ISOCLOR 500 ppm - Internacion',signal:'ATENCION',ghs:['GHS05','GHS07'],
+    h:['H315 - Provoca irritacion cutanea.','H319 - Provoca irritacion ocular.','H335 - Puede irritar vias respiratorias.','H400 - Nocivo para organismos acuaticos.'],
+    p:['P260 - No respirar vapores.','P271 - Utilizar en areas bien ventiladas.','P273 - No dispersar en el medio ambiente.','P280 - Guantes y proteccion ocular ante salpicadura.','P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos.'],
+    epp:'Guantes resistentes. Proteccion ocular ante salpicadura. Ventilacion adecuada.',nota:'1 sobre 25 gr en 20 L. Reposar 1 hora antes de usar.'},
+  iso_1000:{label:'ISOCLOR 1000 ppm - Areas criticas',signal:'PELIGRO',ghs:['GHS05','GHS07'],
+    h:['H315 - Provoca irritacion cutanea.','H319 - Provoca irritacion ocular grave.','H335 - Irrita las vias respiratorias.','H400 - Nocivo para organismos acuaticos.'],
+    p:['P260 - No respirar vapores.','P271 - Utilizar en areas ventiladas.','P273 - No dispersar en el medio ambiente.','P280 - Guantes resistentes, proteccion ocular y delantal.','P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos.'],
+    epp:'Guantes resistentes. Proteccion ocular obligatoria. Delantal impermeable.',nota:'1 sobre 25 gr en 10 L. Reposar 1 hora.'},
+  iso_5000:{label:'ISOCLOR 5000 ppm - Mat. contaminados',signal:'PELIGRO',ghs:['GHS05','GHS07','GHS09'],
+    h:['H290 - Puede ser corrosivo para metales.','H314 - Provoca quemaduras en piel y lesiones oculares.','H335 - Irrita las vias respiratorias.','H400 - Muy nocivo para organismos acuaticos.'],
+    p:['P260 - No respirar vapores. Ventilacion obligatoria.','P271 - Solo en exteriores o ventilacion forzada.','P273 - No dispersar al medio ambiente.','P280 - EPP COMPLETO: guantes, antiparras, delantal.','P310 - Llamar a CENTRO DE TOXICOLOGIA: 0800-333-0160.'],
+    epp:'EPP COMPLETO: Guantes resistentes. Antiparras. Delantal impermeable. Barbijo.',nota:'1 sobre 25 gr en 2 L. ALTA CONCENTRACION. EPP obligatorio.'},
+  iso_10000:{label:'ISOCLOR 10000 ppm - Fluidos/sangre',signal:'PELIGRO',ghs:['GHS05','GHS06','GHS09'],
+    h:['H290 - Corrosivo para metales.','H314 - Provoca quemaduras graves en piel y lesiones oculares.','H331 - Toxico por inhalacion a esta concentracion.','H400 - Muy toxico para organismos acuaticos.'],
+    p:['P260 - NO respirar vapores. Solo en exterior o extraccion forzada.','P271 - Solo exteriores o ventilacion mecanica forzada.','P273 - No dispersar al medio ambiente.','P280 - EPP COMPLETO OBLIGATORIO.','P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos. Llamar al medico.','P310 - Llamar INMEDIATAMENTE a CENTRO DE TOXICOLOGIA: 0800-333-0160.'],
+    epp:'EPP COMPLETO OBLIGATORIO: Guantes goma/PVC (cano largo). Antiparras hermeticas. Delantal impermeable. Barbijo/N95. Botas impermeables.',nota:'MAXIMA CONCENTRACION. 1 sobre 25 gr en 1 L. Solo personal capacitado. Usar dentro de las 24 hs.'}
+};
+
+// ─── HOSPITAL ───
+const CAPS_BY_HOSP = {
+  HZT: [
+    {id:'HZT',        name:'Hospital Zonal Trelew (sede central)'},
+    {id:'HZT-CIT',    name:'CIT - Inmigrantes 180, 1er Piso'},
+    {id:'HZT-CD',     name:'Centro de Dia - Paraguay 237'},
+    {id:'HZT-HC',     name:'Hilando Caminos - Pje. Catamarca 199'},
+    {id:'HZT-CT',     name:'Casa Tutelada - Ceferino Namuncura 2540'},
+    {id:'HZT-EA',     name:'Ex ADOS - Italia y Moreno'},
+    {id:'HZT-PA',     name:'Pichi Anai - San Martin'},
+    {id:'HZT-AMAYA',  name:'CAPS Dr. Ramon Carrillo (Amaya)'},
+    {id:'HZT-CONST',  name:'CAPS Dr. Jorge Morado (Constitucion)'},
+    {id:'HZT-COR',    name:'CAPS Corradi - Pascual Daleoso y Burmeister'},
+    {id:'HZT-DB',     name:'CAPS Gwenda Williams (Don Bosco)'},
+    {id:'HZT-ETC',    name:'CAPS Etchepare - Artigas y Cambrin'},
+    {id:'HZT-LL',     name:'CAPS La Loma - Ecuador 945'},
+    {id:'HZT-PG',     name:'CAPS Planta de Gas - Berreta y Juana Azurduy'},
+    {id:'HZT-FR',     name:'CAPS Ing. Franzetti (San Martin)'},
+    {id:'HZT-SAR',    name:'CAPS Sarmiento - Humberto Beghin 1139'},
+    {id:'HZT-TF',     name:'CAPS Tiro Federal - Saavedra y Lezana'},
+    {id:'HZT-VI',     name:'CAPS Villa Italia - Leandro N. Alem 1587'}
+  ],
+  HSST: [
+    {id:'HSST',       name:'Hospital Subzonal Santa Teresita (sede central)'},
+    {id:'HSST-CC',    name:'CAPS Dra. Alicia Cicalese (Area 12)'},
+    {id:'HSST-A16',   name:'CAPS Area 16'},
+    {id:'HSST-SN',    name:'CAPS Standart Norte - 8 de Diciembre 800'},
+    {id:'HSST-GM',    name:'CAPS Gregorio Mayo - Italia 1315'},
+    {id:'HSST-490',   name:'CAPS Carmelo Berruhet (490 Viviendas)'},
+    {id:'HSST-RC',    name:'CAPS Barrio Rio Chubut - Alejandro Conesa 690'}
+  ]
+};
+
+let currentHosp = 'HMH';
+let currentUnit  = 'HMH';
+
+function onHospChange(){
+  const hosp = document.getElementById('hospSelect').value;
+  currentHosp = hosp;
+  const capsSel  = document.getElementById('capsSelect');
+  const capsLbl  = document.getElementById('caps-label');
+  const caps = CAPS_BY_HOSP[hosp];
+  if(caps){
+    capsSel.innerHTML = caps.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+    capsSel.style.display = 'block';
+    capsLbl.style.display = 'block';
+    currentUnit = caps[0].id;
+  } else {
+    capsSel.style.display = 'none';
+    capsLbl.style.display = 'none';
+    currentUnit = hosp;
+  }
+  applyLogo();
+}
+
+function onCapsChange(){
+  currentUnit = document.getElementById('capsSelect').value;
+}
+
+function applyLogo(){
+  const key = HOSP_KEYS[currentHosp] || 'HMH';
+  const logo = LOGOS[key];
+  document.getElementById('hosp-logo-preview').src = logo;
+  const headerImg = document.getElementById('header-logo-img');
+  if(headerImg) headerImg.src = logo;
+  const hospName = document.getElementById('header-hosp-name');
+  if(hospName){
+    const sel = document.getElementById('hospSelect');
+    hospName.textContent = sel.options[sel.selectedIndex].text;
+  }
+}
+
+function getHospLogo(){
+  const key = HOSP_KEYS[currentHosp] || 'HMH';
+  return LOGOS[key] || '';
+}
+
+function getHospName(){
+  const caps = CAPS_BY_HOSP[currentHosp];
+  if(caps){
+    const capsSel = document.getElementById('capsSelect');
+    const opt = capsSel.options[capsSel.selectedIndex];
+    return opt ? opt.text : caps[0].name;
+  }
+  const sel = document.getElementById('hospSelect');
+  return sel.options[sel.selectedIndex].text;
+}
+
+// ─── TABS ───
+function switchModule(mod, btn){
+  document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.module-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('mod-' + mod).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── RESIDUOS (original functions adapted) ───
+let DB = loadDB();
+let uploadedLogoData = '';
+
+function normalizeDB(db){
+  try{db.forEach(r=>{
+    if(r.note && r.note.indexOf('avisar a supervision/HyS')>=0){
+      r.note=r.note.replace('avisar a supervision/HyS','seguir procedimiento ante derrames, registrar en cuaderno de novedades y comunicar al supervisor');
+    }
+    if(r.code==='Y3' && (!r.pictos || !String(r.pictos).trim())){r.pictos='warning,environment,health';}
+  })}catch(e){}
+  return db;
+}
+function loadDB(){
+  try{const raw=localStorage.getItem('SIEQ_RESIDUOS_DB'); if(raw){return normalizeDB(JSON.parse(raw));}}catch(e){}
+  return normalizeDB(JSON.parse(JSON.stringify(DEFAULT_DB)));
+}
+function saveDB(){localStorage.setItem('SIEQ_RESIDUOS_DB', JSON.stringify(DB));}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function $(id){return document.getElementById(id);}
+
+function init(){
+  // Set initial logo
+  applyLogo();
+  document.getElementById('sgaDate').value = new Date().toISOString().slice(0,10);
+  // Residuos
+  populateSelect();
+  $('includeDate').addEventListener('change',e=>$('dateBox').classList.toggle('hidden',!e.target.checked));
+  $('includeRetiro').addEventListener('change',e=>$('retiroBox').classList.toggle('hidden',!e.target.checked));
+  $('wasteSelect').addEventListener('change',()=>{updatePreview(); toggleY3Fields();});
+  $('y3Subtype').addEventListener('change',toggleY3Fields);
+  updatePreview(); toggleY3Fields();
+  // SGA
+  sgaPopulate();
+}
+
+function populateSelect(){
+  const sel=$('wasteSelect'); sel.innerHTML='';
+  DB.sort((a,b)=>parseInt(a.code.replace('Y',''))-parseInt(b.code.replace('Y',''))).forEach(r=>{
+    const o=document.createElement('option');
+    o.value=r.id; o.textContent=`${r.code} · ${r.title}${r.status==='REVISION'?' (revision)':''}`;
+    sel.appendChild(o);
+  });
+}
+function current(){return DB.find(x=>x.id===$('wasteSelect').value)||DB[0];}
+function updatePreview(){
+  const r=current();
+  $('previewDB').innerHTML=`<b>${esc(r.code)} · ${esc(r.title)}</b><br><span>${esc(r.simple)}</span><br><br><b>Pictogramas:</b> ${resolvePictos(r).length ? esc(resolvePictos(r).join(' · ')) : 'No asignados automaticamente. Verificar antes de usar.'}<br><b>Incompatibilidades:</b> ${esc(r.incompat)}<br><b>Almacenamiento:</b> ${esc(r.storage)}`;
+}
+function toggleY3Fields(){
+  const isY3=current().code==='Y3';
+  $('y3Box').classList.toggle('hidden',!isY3);
+  const other = isY3 && $('y3Subtype').value==='Otro';
+  $('y3OtherBox').classList.toggle('hidden',!other);
+}
+function selectedY3Subtype(){
+  if(current().code!=='Y3') return '';
+  const val=$('y3Subtype').value;
+  if(val==='Otro') return ($('y3Other').value||'').trim();
+  return val.trim();
+}
+function renderLabelLogo(){
+  const logo = uploadedLogoData || getHospLogo();
+  return logo ? `<img src="${logo}" alt="Logo institucional" style="width:100%;height:100%;object-fit:contain;background:#fff">` : 'HMH';
+}
+function clearForm(){
+  ['sector','area','cantidad','recipiente','responsable','observaciones','y3Other'].forEach(id=>{const el=$(id); if(el) el.value='';});
+  if($('y3Subtype')) $('y3Subtype').value='';
+  $('includeDate').checked=false; $('includeRetiro').checked=false;
+  $('dateBox').classList.add('hidden'); $('retiroBox').classList.add('hidden');
+  $('fecha').value=''; $('retiro').value='';
+  toggleY3Fields();
+}
+function resolvePictos(r){return String(r.pictos||'').split(',').map(s=>s.trim()).filter(Boolean);}
+function renderPictos(r){
+  const defs={biohazard:{s:'BIO',t:'Riesgo biologico'},corrosive:{s:'COR',t:'Corrosivo'},toxic:{s:'TOX',t:'Toxico'},flammable:{s:'INF',t:'Inflamable'},oxidizer:{s:'OX',t:'Oxidante'},gas:{s:'GAS',t:'Gas bajo presion'},health:{s:'SAL',t:'Peligro para la salud'},environment:{s:'AMB',t:'Peligro ambiental'},warning:{s:'ATN',t:'Atencion'},explosive:{s:'EXP',t:'Explosivo/reactivo'},pharma:{s:'FAR',t:'Residuo farmaceutico'}};
+  const arr=resolvePictos(r);
+  if(!arr.length) return '';
+  return arr.map(k=>{const d=defs[k]||{s:k.slice(0,3).toUpperCase(),t:k}; return `<div class="picto"><div class="diamond"><span>${esc(d.s)}</span></div><div class="ptxt">${esc(d.t)}</div></div>`;}).join('');
+}
+function dateFmt(v){if(!v) return ''; const [y,m,d]=v.split('-'); return `${d}/${m}/${y}`;}
+function generateLabels(){
+  const r=current(); const n=Math.max(1,Math.min(20,parseInt($('copies').value||'1')));
+  const cols=$('layout').value; const name=r.title; const chips=[];
+  if($('sector').value) chips.push(`<span class="datechip"><b>Servicio:</b> ${esc($('sector').value)}</span>`);
+  if($('area').value) chips.push(`<span class="datechip"><b>Acopio:</b> ${esc($('area').value)}</span>`);
+  if($('cantidad').value) chips.push(`<span class="datechip"><b>Cantidad:</b> ${esc($('cantidad').value)}</span>`);
+  if($('recipiente').value) chips.push(`<span class="datechip"><b>Recipiente:</b> ${esc($('recipiente').value)}</span>`);
+  if($('responsable').value) chips.push(`<span class="datechip"><b>Responsable:</b> ${esc($('responsable').value)}</span>`);
+  if($('includeDate').checked && $('fecha').value) chips.push(`<span class="datechip"><b>Fecha:</b> ${esc(dateFmt($('fecha').value))}</span>`);
+  if($('includeRetiro').checked && $('retiro').value) chips.push(`<span class="datechip"><b>Retiro/limite:</b> ${esc(dateFmt($('retiro').value))}</span>`);
+  let obs=$('observaciones').value || r.note;
+  const cardClass=(r.code==='Y14')?'label-card noapt':'label-card';
+  const subtype = selectedY3Subtype();
+  const html = Array.from({length:n}).map(()=>`<article class="${cardClass}">
+<div class="lab-head"><div class="lab-brand"><div class="lab-logo">${renderLabelLogo()}</div><div><div class="lab-hospital">${esc(getHospName().split('·')[0].trim())}</div><div class="lab-sub">Etiqueta interna de residuo peligroso</div></div></div><div class="lab-sign">Servicio de Higiene y Seguridad Laboral<br>Lic. Belen Pellegrini</div></div>
+<div class="lab-main">
+  <div class="ybox"><div class="code ${String(r.code||'').length>2?'small-code':''}">${esc(r.code)}</div><div class="class">Clase</div></div>
+  <div class="titlebox"><div class="kind">Residuo peligroso</div><div class="title">${esc(name)}</div><div class="legal">${esc(r.legal)}</div></div>
+  ${subtype ? `<div class="subtype-banner"><b>Diferenciacion Y3:</b> ${esc(subtype)}</div>` : ''}
+  <div class="fieldline">${chips.join(' ') || '<b>Datos variables:</b> completar segun generacion/acopio institucional.'}</div>
+  ${resolvePictos(r).length ? `<div class="picto-row">${renderPictos(r)}</div>` : ''}
+  <div class="blocks"><div class="block danger-block"><h4>Incompatibilidades / No mezclar</h4><p>${esc(r.incompat)}</p></div><div class="block store"><h4>Almacenamiento</h4><p>${esc(r.storage)}</p></div></div>
+  <div class="blocks"><div class="block"><h4>Caracteristicas peligrosas</h4><p>${esc(r.hazards)}</p></div><div class="block"><h4>Recipiente / EPP</h4><p><b>Recipiente:</b> ${esc(r.container)}<br><b>EPP:</b> ${esc(r.ppe)}</p></div></div>
+  <div class="fieldline examples-line"><b>Ejemplos/alcance:</b> ${esc(r.examples)}</div>
+  <div class="footer-note">${esc(obs)}</div>
+</div>
+</article>`).join('');
+  $('labels').className='labels layout'+cols; $('labels').innerHTML=html;
+}
+function unlockAdmin(){if($('adminPass').value===ADMIN_KEY){$('adminPanel').classList.add('on'); $('adminPass').value='';} else {alert('Clave incorrecta.');}}
+function loadSelectedIntoAdmin(){const r=current(); ['code','title','legal','simple','examples','hazards','container','ppe','incompat','storage','note','status','pictos'].forEach(k=>{const el=$('a_'+k); if(el) el.value=r[k]||'';});}
+function saveAdminRecord(){
+  const code=$('a_code').value.trim().toUpperCase();
+  if(!code){alert('Ingresar codigo Y.');return;}
+  const rec={id:code,code,title:$('a_title').value.trim()||'Sin titulo',pictos:$('a_pictos').value.trim(),legal:$('a_legal').value.trim(),simple:$('a_simple').value.trim(),examples:$('a_examples').value.trim(),hazards:$('a_hazards').value.trim(),container:$('a_container').value.trim(),ppe:$('a_ppe').value.trim(),incompat:$('a_incompat').value.trim(),storage:$('a_storage').value.trim(),note:$('a_note').value.trim(),status:$('a_status').value};
+  const i=DB.findIndex(x=>x.id===code); if(i>=0) DB[i]=rec; else DB.push(rec);
+  saveDB(); populateSelect(); $('wasteSelect').value=code; updatePreview(); alert('Registro guardado.');
+}
+function deleteSelected(){const r=current(); if(!confirm(`Eliminar ${r.code} de la base local?`)) return; DB=DB.filter(x=>x.id!==r.id); saveDB(); populateSelect(); updatePreview();}
+function exportDB(){const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='SIEQ_base_residuos_peligrosos.json'; a.click(); URL.revokeObjectURL(a.href);}
+function importDB(ev){const f=ev.target.files[0]; if(!f)return; const rd=new FileReader(); rd.onload=()=>{try{const data=JSON.parse(rd.result); if(!Array.isArray(data)) throw new Error('La base debe ser un array'); DB=data; saveDB(); populateSelect(); updatePreview(); alert('Base importada.');}catch(e){alert('No se pudo importar: '+e.message)}}; rd.readAsText(f);}
+function resetDB(){if(confirm('Restaurar base inicial y perder cambios locales?')){DB=JSON.parse(JSON.stringify(DEFAULT_DB)); saveDB(); populateSelect(); updatePreview();}}
+
+// ─── SGA MODULE ───
+function sgaPopulate(){
+  const sel = $('sgaProd'); sel.innerHTML = '';
+  PRODUCTS.forEach(p => {const o=document.createElement('option'); o.value=p.name; o.textContent=p.name; sel.appendChild(o);});
+}
+function sgaCurProd(){return PRODUCTS.find(p=>p.name===$('sgaProd').value)||PRODUCTS[0];}
+function sgaProdChange(){
+  // Reset dil override when product changes
+  window._sgaDilOv = null;
+  $('sgaDilInfo').style.display='none';
+  $('sgaDilOtra').style.display='none';
+}
+function sgaDilChange(){
+  const v=$('sgaDilSel').value;
+  $('sgaDilOtra').style.display = v==='otra'?'block':'none';
+  const info=$('sgaDilInfo');
+  if(DIL_INFO[v]){info.innerHTML='&#9432; '+DIL_INFO[v]; info.style.display='block';}
+  else info.style.display='none';
+  window._sgaDilOv = DIL_OVERRIDE[v] || null;
+}
+function sgaGetDilLabel(){
+  const v=$('sgaDilSel').value;
+  if(v==='otra') return $('sgaDilOtra').value||'Especificar';
+  if(window._sgaDilOv) return window._sgaDilOv.label;
+  const labels={lpu:'Listo para usar','70%':'Conc. 70%','96%':'Conc. 96%','10%':'Conc. 10%','5%':'Conc. 5%','1%':'Conc. 1%','0.5%':'Conc. 0.5%','1:10':'Dil. 1:10','1:20':'Dil. 1:20','1:50':'Dil. 1:50','1:100':'Dil. 1:100','1:200':'Dil. 1:200'};
+  return labels[v]||v;
+}
+function sgaDiam(code){
+  const m=GHS_META[code]||[code.replace('GHS',''),''];
+  return `<div class="sga-diam-wrap"><div class="sga-diam"><span>${m[0]}</span></div><div class="sga-diam-lbl">${m[1]}</div></div>`;
+}
+function sgaFmtDate(v){if(!v) return ''; const [y,m,d]=v.split('-'); return `${d}/${m}/${y}`;}
+function sgaBuildLabel(p, fmt){
+  const ov = window._sgaDilOv;
+  const ghs = ov ? ov.ghs : (p.ghs||[]);
+  const h = ov ? ov.h : (p.h||[]);
+  const pList = ov ? ov.p : (p.p||[]);
+  const signal = ov ? ov.signal : (p.signal||'ATENCION');
+  const epp = ov ? ov.epp : '';
+  const nota = ov ? ov.nota : '';
+  const sigCls = signal.indexOf('PELIGRO')>=0?'peligro':signal.indexOf('ATENCION')>=0?'atencion':'sin-peligro';
+  const dil = sgaGetDilLabel();
+  const hasFecha = $('ckSgaFecha').checked;
+  const hasExp = $('ckSgaExp').checked;
+  const datePrep = hasFecha ? sgaFmtDate($('sgaDate').value) : null;
+  const exp = hasExp ? sgaFmtDate($('sgaExp').value) : null;
+  const sec = $('sgaSec').value||'';
+  const prep = $('sgaPrep').value||'';
+  const env = $('sgaEnv').value||'';
+  const warn = $('sgaWarn').value||'';
+  const hospName = getHospName().split('(')[0].trim().split('·')[0].trim();
+  const logo = getHospLogo();
+  const blank = `<span class="blank-line"></span>`;
+
+  // Escala tipografica segun formato
+  const scale = {
+    xl:  {title:'22px', signal:'15px', meta:'12px', ghs:'40px', hp:'11px', field:'10px', footer:'10px', headH:'36px', headLogo:'40px'},
+    l:   {title:'18px', signal:'13px', meta:'11px', ghs:'32px', hp:'9.5px', field:'9px', footer:'9px', headH:'30px', headLogo:'34px'},
+    '4': {title:'14px', signal:'11px', meta:'9.5px',ghs:'26px', hp:'8px', field:'8px', footer:'8px', headH:'24px', headLogo:'28px'},
+    '6': {title:'12px', signal:'10px', meta:'9px',  ghs:'22px', hp:'7.5px',field:'7.5px',footer:'7.5px',headH:'22px',headLogo:'24px'},
+    '8': {title:'11px', signal:'9.5px',meta:'8.5px',ghs:'20px', hp:'7px', field:'7px', footer:'7px', headH:'20px', headLogo:'22px'}
+  };
+  const s = scale[fmt] || scale['6'];
+
+  // Datos variables: mostrar valor o linea en blanco
+  const showDil   = dil && dil !== 'lpu' && dil !== 'Listo para usar';
+  const dilVal    = showDil ? esc(dil) : blank;
+  const envVal    = env ? esc(env) : blank;
+  const fechaVal  = datePrep || blank;
+  const expVal    = exp || blank;
+  const secVal    = sec ? esc(sec) : blank;
+  const prepVal   = prep ? esc(prep) : blank;
+
+  // Numero de cols H/P segun espacio disponible
+  const hSlice = fmt==='xl'?8:fmt==='l'?7:fmt==='4'?6:5;
+  const pSlice = fmt==='xl'?8:fmt==='l'?7:fmt==='4'?6:5;
+
+  return `<article class="sga-label-card">
+  <div class="sga-head" style="padding:${fmt==='xl'?'10px 14px':fmt==='l'?'8px 12px':'5px 8px'}">
+    <div style="display:flex;align-items:center;gap:8px">
+      <img class="sga-head-logo" src="${logo}" style="height:${s.headLogo};max-width:${fmt==='xl'?'90px':fmt==='l'?'70px':'50px'}" alt="">
+      <div>
+        <div class="sga-hospital" style="font-size:${fmt==='xl'?'13px':fmt==='l'?'11px':'9px'}">${esc(hospName)} | SIEQ</div>
+        <div class="sga-sub" style="font-size:${fmt==='xl'?'10px':fmt==='l'?'9px':'7.5px'}">Etiqueta de fraccionamiento SGA/GHS</div>
+      </div>
+    </div>
+    <div class="sga-sign" style="font-size:${fmt==='xl'?'10px':fmt==='l'?'9px':'7.5px'}">Servicio de Higiene y Seguridad Laboral<br>Lic. Belen Pellegrini</div>
+  </div>
+  <div class="sga-body" style="padding:${fmt==='xl'?'12px 14px':fmt==='l'?'10px 12px':'6px 8px'};gap:${fmt==='xl'?'8px':fmt==='l'?'6px':'4px'}">
+
+    <!-- NOMBRE Y SEÑAL: SIEMPRE DESTACADOS -->
+    <div style="border-bottom:2px solid var(--azul);padding-bottom:${fmt==='xl'?'8px':fmt==='l'?'6px':'4px'};margin-bottom:${fmt==='xl'?'4px':fmt==='l'?'3px':'2px'}">
+      <div class="sga-name" style="font-size:${s.title};font-weight:900;color:var(--azul);text-transform:uppercase;line-height:1.05;margin-bottom:4px">${esc(p.name)}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="sga-signal ${sigCls}" style="font-size:${s.signal};padding:${fmt==='xl'?'4px 12px':fmt==='l'?'3px 9px':'2px 6px'}">${esc(signal)}</span>
+        <span style="font-size:${s.meta};color:#475569"><b>CAS:</b> ${esc(p.cas)} &nbsp;|&nbsp; <b>FDS:</b> ${esc(p.source)}</span>
+      </div>
+    </div>
+
+    <!-- PICTOGRAMAS GHS -->
+    ${ghs.length ? `<div class="sga-ghs" style="min-height:${s.headH}">${ghs.map(c=>{const m=GHS_META[c]||[c.replace('GHS',''),''];return `<div class="sga-diam-wrap"><div class="sga-diam" style="width:${s.ghs};height:${s.ghs};border-width:${fmt==='xl'?'2.5px':'2px'}"><span style="font-size:calc(${s.ghs} * 0.28)">${m[0]}</span></div><div class="sga-diam-lbl" style="font-size:calc(${s.ghs} * 0.2);max-width:calc(${s.ghs} + 8px)">${m[1]}</div></div>`;}).join('')}</div>` : ''}
+
+    <!-- H y P -->
+    <div class="sga-hp" style="font-size:${s.hp}">
+      <div class="sga-hp-col">
+        <h4 style="font-size:${s.hp};font-weight:800;color:var(--azul);margin:0 0 2px;text-transform:uppercase;letter-spacing:.04em">Indicaciones H</h4>
+        <ul style="margin:0;padding-left:12px">${h.slice(0,hSlice).map(x=>`<li style="margin-bottom:1px">${esc(x)}</li>`).join('')}</ul>
+      </div>
+      <div class="sga-hp-col">
+        <h4 style="font-size:${s.hp};font-weight:800;color:var(--azul);margin:0 0 2px;text-transform:uppercase;letter-spacing:.04em">Consejos P</h4>
+        <ul style="margin:0;padding-left:12px">${pList.slice(0,pSlice).map(x=>`<li style="margin-bottom:1px">${esc(x)}</li>`).join('')}</ul>
+      </div>
+    </div>
+
+    <!-- DATOS VARIABLES -->
+    <div class="sga-vars" style="font-size:${s.field}">
+      <div class="sga-field"><b>Dilucion/conc.</b>${dilVal}</div>
+      <div class="sga-field"><b>Envase autorizado</b>${envVal}</div>
+      <div class="sga-field"><b>Fecha preparacion</b>${fechaVal}</div>
+      <div class="sga-field"><b>Vencimiento</b>${expVal}</div>
+      <div class="sga-field"><b>Sector / servicio</b>${secVal}</div>
+      <div class="sga-field"><b>Preparo / fracciono</b>${prepVal}</div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="sga-footer" style="font-size:${s.footer}">
+      ${nota?`<b>Nota:</b> ${esc(nota)} `:''} ${epp?`<b>EPP:</b> ${esc(epp)} `:''}${esc(warn)}<br>
+      <span class="sga-emerg">Emergencias 107 | CNI 0800-333-0160</span>
+    </div>
+  </div>
+</article>`;
+}
+
+function sgaGenerate(){
+  const p = sgaCurProd();
+  const qty = Math.max(1, Math.min(120, parseInt($('sgaQty').value||'6')));
+  const fmt = $('sgaFmt').value;
+  const perPage = fmt==='xl'?1:fmt==='l'?2:parseInt(fmt)||6;
+  const container = $('sga-labels');
+  container.innerHTML='';
+  let rem=qty;
+  while(rem>0){
+    const cnt=Math.min(perPage,rem);
+    const sheet=document.createElement('div');
+    // Dimensiones de hoja segun formato
+    const gap = fmt==='xl'?'0':fmt==='l'?'6mm':'4mm';
+    const cols = (fmt==='xl'||fmt==='l')?'1fr':'1fr 1fr';
+    // Altura minima de tarjeta segun formato
+    const minH = fmt==='xl'?'270mm':fmt==='l'?'133mm':fmt==='4'?'133mm':fmt==='6'?'87mm':'65mm';
+    sheet.style.cssText = `display:grid;grid-template-columns:${cols};gap:${gap};margin-bottom:16px;width:198mm;`;
+    for(let i=0;i<cnt;i++){
+      sheet.insertAdjacentHTML('beforeend', sgaBuildLabel(p, fmt));
+    }
+    // Aplicar altura minima a cada tarjeta
+    sheet.querySelectorAll('.sga-label-card').forEach(c=>{
+      c.style.minHeight = minH;
+      if(fmt==='xl') c.style.height = '276mm';
+      else if(fmt==='l') c.style.height = '133mm';
+    });
+    // Relleno si quedan huecos en la fila
+    for(let j=cnt;j<perPage;j++){
+      const blank=document.createElement('div');
+      blank.className='sga-label-card';
+      blank.style.cssText=`visibility:hidden;min-height:${minH}`;
+      sheet.appendChild(blank);
+    }
+    container.appendChild(sheet);
+    rem-=cnt;
+  }
+}
+function sgaClear(){
+  ['sgaSec','sgaPrep','sgaEnv','sgaDate','sgaExp'].forEach(id=>{$(id).value='';});
+  $('sgaDilSel').value='lpu';
+  $('sgaDilInfo').style.display='none';
+  $('sgaDilOtra').style.display='none';
+  $('ckSgaFecha').checked=false;
+  $('ckSgaExp').checked=false;
+  window._sgaDilOv=null;
+}
+
+init();
+</script>
+</body>
+</html>
