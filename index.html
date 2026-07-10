@@ -185,7 +185,21 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
   .module-tabs,.hosp-bar,.controls,.no-print{display:none!important}
   .module-section{display:block!important}
   .module-section:not(.active){display:none!important}
-}
+}/* ─── INSTRUCCIONES DE USO ─── */
+.howto{max-width:1180px;margin:18px auto 0;padding:0 18px}
+.howto-box{background:linear-gradient(90deg,#fff8e1,#fffdf5);border:2px solid #f5b301;border-left:8px solid #f5b301;border-radius:14px;box-shadow:0 3px 14px rgba(245,179,1,.18);overflow:hidden}
+.howto-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none}
+.howto-head .ico{font-size:24px;line-height:1}
+.howto-head h2{margin:0;font-size:16px;color:#7a4a00;font-weight:900;letter-spacing:.01em;flex:1}
+.howto-head .chev{font-size:13px;font-weight:900;color:#7a4a00;transition:transform .2s}
+.howto-box.open .howto-head .chev{transform:rotate(180deg)}
+.howto-body{display:none;padding:0 20px 20px;font-size:13.5px;line-height:1.5;color:#3a2c00}
+.howto-box.open .howto-body{display:block}
+.howto-body h3{margin:14px 0 6px;font-size:13.5px;color:#8a5a00;text-transform:uppercase;letter-spacing:.03em}
+.howto-body ol,.howto-body ul{margin:4px 0 0;padding-left:20px}
+.howto-body li{margin-bottom:4px}
+.howto-body .tip{background:#fff;border:1px solid #f0d488;border-radius:8px;padding:8px 12px;margin-top:10px;font-weight:700;color:#7a4a00}
+@media(max-width:900px){.howto-head h2{font-size:14px}}
 </style>
 </head>
 <body>
@@ -220,6 +234,58 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
   <label id="caps-label" style="display:none">Dependencia:</label>
   <select class="hosp-select" id="capsSelect" onchange="onCapsChange()" style="display:none;min-width:300px"></select>
   <img id="hosp-logo-preview" src="" alt="" style="height:44px;max-width:180px;width:auto;object-fit:contain;background:#fff;border-radius:6px;padding:4px 8px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">
+</div>
+
+<!-- INSTRUCCIONES DE USO -->
+<div class="howto no-print">
+  <div class="howto-box open" id="howtoBox">
+    <div class="howto-head" onclick="document.getElementById('howtoBox').classList.toggle('open')">
+      <span class="ico">📋</span>
+      <h2>Instrucciones de uso del sistema (leer antes de generar etiquetas)</h2>
+      <span class="chev">▼</span>
+    </div>
+    <div class="howto-body">
+      <h3>1. Elegí el establecimiento</h3>
+      <ol>
+        <li>En la barra superior, seleccioná el <b>hospital</b> (HMH, HZT o HSST). El logo y el nombre institucional se actualizan automáticamente en el encabezado y en las etiquetas.</li>
+        <li>Si corresponde a un CAPs u otra dependencia, seleccionala en el segundo desplegable que aparece.</li>
+      </ol>
+
+      <h3>2. Elegí el módulo</h3>
+      <ol>
+        <li><b>⚠ Residuos peligrosos:</b> para rotular residuos según las corrientes Y de la Ley 24.051.</li>
+        <li><b>🏷 Etiquetas SGA / GHS:</b> para rotular productos químicos fraccionados según el Sistema Globalmente Armonizado.</li>
+      </ol>
+
+      <h3>3. Módulo Residuos peligrosos</h3>
+      <ol>
+        <li>Seleccioná la <b>clase/corriente de residuo</b> (Y1, Y3, Y4, etc.). El sistema completa automáticamente la descripción legal, incompatibilidades, almacenamiento y EPP desde la base institucional.</li>
+        <li>Si elegís Y3, indicá la diferenciación (medicamentos vencidos, citostáticos, etc.) cuando corresponda.</li>
+        <li>Completá los campos operativos: área, cantidad, recipiente, fecha, si aplica.</li>
+        <li>Elegí el <b>formato de hoja</b>: XL (1 por A4), 2 o 4 etiquetas por hoja, según el tamaño del contenedor a rotular.</li>
+        <li>Presioná <b>"Generar etiquetas"</b> para ver la vista previa y <b>"Imprimir"</b> para enviarla a la impresora.</li>
+      </ol>
+
+      <h3>4. Módulo Etiquetas SGA / GHS</h3>
+      <ol>
+        <li>Seleccioná el <b>producto</b> y, si corresponde, la <b>dilución</b> preparada.</li>
+        <li>El sistema carga indicaciones H, consejos P y pictogramas GHS desde la base.</li>
+        <li>Elegí el formato de hoja y generá/imprimí la etiqueta igual que en el módulo de residuos.</li>
+      </ol>
+
+      <h3>5. Campos para completar a mano</h3>
+      <p>El sistema está pensado para combinarse con <b>completado manual</b>: cualquier campo operativo que dejes vacío en el formulario se imprime como una <b>línea en blanco</b> en la etiqueta, para completarla a mano con lapicera indeleble en el momento de rotular.</p>
+      <ol>
+        <li>Generá e imprimí la etiqueta con los datos que ya tenés cargados (podés dejar sin completar lo que aún no se sabe: fecha de retiro, cantidad exacta, responsable, etc.).</li>
+        <li>Pegá la etiqueta en el recipiente o contenedor correspondiente.</li>
+        <li>Completá a mano, con lapicera indeleble, los espacios en blanco en el momento en que se conoce el dato (por ejemplo, al cerrar la bolsa o al momento del retiro).</li>
+        <li>En <b>Residuos peligrosos</b>, los campos que pueden quedar en blanco para completar a mano son: Servicio, Área de acopio, Cantidad, Recipiente, Responsable, Fecha y Retiro/límite.</li>
+        <li>En <b>Etiquetas SGA/GHS</b>, pueden quedar en blanco para completar a mano: dilución, sector, preparado por, fecha de preparación y fecha de vencimiento.</li>
+      </ol>
+
+      <div class="tip">⚠ Importante: los pictogramas y datos cargados automáticamente deben validarse siempre contra la FDS vigente, el producto real y el criterio del Servicio de Higiene y Seguridad antes de imprimir y pegar cualquier etiqueta.</div>
+    </div>
+  </div>
 </div>
 
 <main class="wrap" style="max-width:1180px;margin:0 auto;padding:28px 18px 40px">
