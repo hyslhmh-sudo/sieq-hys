@@ -568,25 +568,35 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
       </div>
       <div class="dil-info" id="calcCustomResult" style="margin-top:10px;display:block"></div>
 
-      <h3 style="margin:22px 0 8px;font-size:15px;color:var(--azul)">Por qué se calcula así (fundamento)</h3>
-      <div class="howto-body" style="padding:0">
-        <p><b>1. Por qué 1% equivale a 10.000 ppm.</b><br>
-        "%" en una solución (concentración peso/volumen) significa gramos de soluto cada 100 ml de solución. "ppm" (partes por millón) equivale a mg de soluto cada litro (1.000.000 mg) de solución. Convirtiendo unidades: 1% = 1 g/100 ml = 10 g/L = 10.000 mg/L = 10.000 ppm. Por eso una lavandina al 5,5% tiene 5,5 × 10.000 = 55.000 ppm de cloro disponible en estado puro.</p>
+      <h3 style="margin:22px 0 8px;font-size:15px;color:var(--azul)">Por qué se calcula así (explicado simple)</h3>
+      <div class="howto-body" style="padding:0;display:block">
+        <p><b>¿Qué es el "ppm"?</b><br>
+        Es sólo una forma de decir "qué tan fuerte" queda la mezcla de agua con lavandina. Cuanto más alto el número de ppm, más fuerte (más cloro tiene) esa mezcla. 100 ppm es una mezcla suave; 10.000 ppm es muy fuerte y se usa solo para casos especiales (por ejemplo, sangre u otros fluidos).</p>
 
-        <p><b>2. Por qué se usa C1×V1 = C2×V2 (principio de conservación de la masa).</b><br>
-        Al diluir, la cantidad total de cloro disponible (soluto) no cambia — solo se le agrega agua, que no aporta ni quita cloro. La cantidad de soluto se calcula como concentración × volumen. Entonces:</p>
+        <p><b>¿De dónde sale el "55.000" o el "25.000" que aparece en la calculadora?</b><br>
+        La lavandina que se compra ya viene con una fuerza marcada en el envase, por ejemplo "5,5%". Ese porcentaje es otra forma de escribir lo mismo que el ppm, sólo que en otra escala. Para pasarlo a ppm, se multiplica por 10.000: 5,5% × 10.000 = 55.000. Es como pasar pesos a centavos: es el mismo valor, escrito distinto. Por eso, la lavandina pura (sin diluir todavía) al 5,5% "vale" 55.000 ppm, y al 2,5% "vale" 25.000 ppm.</p>
+
+        <p><b>¿Por qué agregando más o menos lavandina cambia el resultado?</b><br>
+        Pensalo como hacer jugo con un concentrado: si a la misma cantidad de concentrado le agregás poca agua, el jugo queda fuerte; si le agregás mucha agua, queda más suave. La cantidad de "jugo puro" que pusiste no cambió — lo que cambió es en cuánta agua quedó repartida. Con la lavandina pasa exactamente lo mismo: la cantidad de cloro que se agrega no varía sola, sino que se reparte en más o menos agua. Por eso, para lograr una fuerza (ppm) exacta en una cantidad de agua elegida, se puede calcular con precisión cuánta lavandina hace falta agregar.</p>
+
+        <p><b>La cuenta que hace la calculadora, en criollo:</b></p>
         <ol>
-          <li>Cantidad de cloro que aporta la lavandina concentrada = C1 × V1 (concentración de la lavandina × volumen de lavandina que se agrega).</li>
-          <li>Cantidad de cloro en la solución final diluida = C2 × V2 (concentración deseada × volumen final total, lavandina + agua).</li>
-          <li>Como la cantidad de cloro es la misma antes y después de diluir (no se crea ni se destruye, solo se reparte en más volumen): <b>C1 × V1 = C2 × V2</b>.</li>
-          <li>Despejando el dato que se busca (V1, cuánta lavandina agregar): <b>V1 = (C2 × V2) / C1</b>.</li>
+          <li>Se toma la fuerza que se quiere lograr (por ejemplo, 1000 ppm) y se multiplica por la cantidad total de líquido que se va a preparar (por ejemplo, 1000 ml).</li>
+          <li>Ese resultado se divide por la fuerza de la lavandina pura, sin diluir (55.000 ppm si es al 5,5%, o 25.000 ppm si es al 2,5%).</li>
+          <li>Lo que da esa cuenta son los <b>ml de lavandina</b> que hay que agregar. El resto, hasta completar el volumen total elegido, es agua.</li>
         </ol>
-        <p>Esta es la fórmula estándar utilizada en los protocolos de preparación de soluciones cloradas para desinfección de la Organización Panamericana de la Salud / OMS (recomendaciones OPS/OMS para preparación de soluciones desinfectantes con hipoclorito de sodio) y en las guías de dosificación de cloro para sistemas de agua, por lo que el cálculo es trazable y verificable ante una auditoría o control de calidad.</p>
 
-        <div class="tip">Ejemplo desarrollado: para preparar 1000 ppm en 1 litro (1000 ml) con lavandina al 5,5% (55.000 ppm):<br>
-        V1 = (C2 × V2) / C1 = (1000 ppm × 1000 ml) / 55.000 ppm = 1.000.000 / 55.000 = <b>18,18 ml de lavandina</b> (se redondea a 18,2 ml para medir con jeringa) + agua hasta completar 1000 ml.<br>
-        Verificación: 18,18 ml × 55.000 ppm = 1.000.000, exactamente igual a 1000 ppm × 1000 ml. El cloro se conserva, solo cambia el volumen; el redondeo a 18,2 ml es la diferencia práctica de medición, no un error de fórmula.</div>
-        <div class="tip">⚠ Preparar siempre con agua fría, en envase opaco y rotulado, y usar dentro de las 24 hs. Validar la concentración real de la lavandina disponible (verificar etiqueta del envase) antes de calcular, ya que puede variar entre marcas y lotes.</div>
+        <div class="tip">Ejemplo: para preparar 1000 ppm en 1 litro (1000 ml) con lavandina al 5,5% (55.000 ppm):<br>
+        (1000 × 1000) ÷ 55.000 = <b>18,2 ml de lavandina</b> + agua hasta completar 1 litro.</div>
+
+        <p style="font-size:12.5px;color:#666;margin-top:14px">Para quien quiera revisar de dónde sale esta forma de calcular, esta es la misma fórmula que usa la Organización Panamericana de la Salud (OPS), que es la oficina de la Organización Mundial de la Salud (OMS) para América, en sus guías oficiales de preparación de soluciones desinfectantes:</p>
+        <ul style="margin:4px 0 12px 20px;padding:0;font-size:12.5px">
+          <li><a href="https://www.paho.org/es/documentos/covid-19-recomendaciones-para-preparacion-soluciones-desinfeccion-15-mayo-2020" target="_blank" rel="noopener">OPS/OMS — Recomendaciones para la preparación de soluciones de desinfección</a></li>
+          <li><a href="https://iris.paho.org/handle/10665.2/52139" target="_blank" rel="noopener">OPS/OMS — Documento completo (repositorio oficial IRIS-PAHO)</a></li>
+          <li><a href="https://www.paho.org/sites/default/files/2019-12/4_Guia_Limpieza_Unidades_Rehidratacion.pdf" target="_blank" rel="noopener">OPS/OMS — Guía de limpieza y desinfección</a></li>
+        </ul>
+
+        <div class="tip">⚠ Preparar siempre con agua fría, en envase opaco y rotulado, y usar dentro de las 24 hs. Antes de calcular, revisar la etiqueta del envase de la lavandina para confirmar su concentración real, ya que puede variar entre marcas y lotes.</div>
       </div>
     </div>
   </section>
