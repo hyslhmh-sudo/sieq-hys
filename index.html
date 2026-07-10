@@ -524,7 +524,9 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
             <option value="70%">Concentracion 70%</option>
             <option value="96%">Concentracion 96%</option>
             <option value="10%">Concentracion 10%</option>
+            <option value="5.5%">Concentracion 5.5%</option>
             <option value="5%">Concentracion 5%</option>
+            <option value="2.5%">Concentracion 2.5%</option>
             <option value="1%">Concentracion 1%</option>
             <option value="0.5%">Concentracion 0.5%</option>
             <option value="1:10">Dilucion 1:10</option>
@@ -554,13 +556,13 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
 
         <div class="row">
           <div>
-            <label><input type="checkbox" id="ckSgaFecha" style="width:auto"> Imprimir fecha de preparacion</label>
-            <input id="sgaDate" type="date" style="margin-top:4px">
+            <label><input type="checkbox" id="ckSgaFecha" style="width:auto" onchange="document.getElementById('sgaDate').style.display=this.checked?'block':'none'"> Imprimir fecha de preparacion</label>
+            <input id="sgaDate" type="date" style="margin-top:4px;display:none">
             <p class="small">Si no se marca, imprime espacio en blanco para completar a mano.</p>
           </div>
           <div>
-            <label><input type="checkbox" id="ckSgaExp" style="width:auto"> Imprimir fecha de vencimiento</label>
-            <input id="sgaExp" type="date" style="margin-top:4px">
+            <label><input type="checkbox" id="ckSgaExp" style="width:auto" onchange="document.getElementById('sgaExp').style.display=this.checked?'block':'none'"> Imprimir fecha de vencimiento</label>
+            <input id="sgaExp" type="date" style="margin-top:4px;display:none">
             <p class="small">Si no se marca, imprime espacio en blanco.</p>
           </div>
         </div>
@@ -793,7 +795,7 @@ function $(id){return document.getElementById(id);}
 function init(){
   // Set initial logo
   applyLogo();
-  document.getElementById('sgaDate').value = new Date().toISOString().slice(0,10);
+  // dates start hidden and empty
   // Residuos
   populateSelect();
   $('includeDate').addEventListener('change',e=>$('dateBox').classList.toggle('hidden',!e.target.checked));
@@ -869,7 +871,17 @@ function generateLabels(){
   <div class="ybox"><div class="code ${String(r.code||'').length>2?'small-code':''}">${esc(r.code)}</div><div class="class">Clase</div></div>
   <div class="titlebox"><div class="kind">Residuo peligroso</div><div class="title">${esc(name)}</div><div class="legal">${esc(r.legal)}</div></div>
   ${subtype ? `<div class="subtype-banner"><b>Diferenciacion Y3:</b> ${esc(subtype)}</div>` : ''}
-  <div class="fieldline">${chips.join(' ') || '<b>Datos variables:</b> completar segun generacion/acopio institucional.'}</div>
+  <div class="fieldline">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:11px">
+      <div><b>Servicio:</b> ${$('sector').value ? esc($('sector').value) : '<span style="display:inline-block;min-width:90px;border-bottom:1.5px solid #333">&nbsp;</span>'}</div>
+      <div><b>Area de acopio:</b> ${$('area').value ? esc($('area').value) : '<span style="display:inline-block;min-width:90px;border-bottom:1.5px solid #333">&nbsp;</span>'}</div>
+      <div><b>Cantidad:</b> ${$('cantidad').value ? esc($('cantidad').value) : '<span style="display:inline-block;min-width:90px;border-bottom:1.5px solid #333">&nbsp;</span>'}</div>
+      <div><b>Recipiente:</b> ${$('recipiente').value ? esc($('recipiente').value) : '<span style="display:inline-block;min-width:90px;border-bottom:1.5px solid #333">&nbsp;</span>'}</div>
+      <div><b>Responsable:</b> ${$('responsable').value ? esc($('responsable').value) : '<span style="display:inline-block;min-width:90px;border-bottom:1.5px solid #333">&nbsp;</span>'}</div>
+      ${$('includeDate').checked && $('fecha').value ? `<div><b>Fecha:</b> ${esc(dateFmt($('fecha').value))}</div>` : `<div><b>Fecha:</b> <span style="display:inline-block;min-width:90px;border-bottom:1.5px solid #333">&nbsp;</span></div>`}
+      ${$('includeRetiro').checked && $('retiro').value ? `<div><b>Retiro/limite:</b> ${esc(dateFmt($('retiro').value))}</div>` : `<div><b>Retiro/limite:</b> <span style="display:inline-block;min-width:90px;border-bottom:1.5px solid #333">&nbsp;</span></div>`}
+    </div>
+  </div>
   ${resolvePictos(r).length ? `<div class="picto-row">${renderPictos(r)}</div>` : ''}
   <div class="blocks"><div class="block danger-block"><h4>Incompatibilidades / No mezclar</h4><p>${esc(r.incompat)}</p></div><div class="block store"><h4>Almacenamiento</h4><p>${esc(r.storage)}</p></div></div>
   <div class="blocks"><div class="block"><h4>Caracteristicas peligrosas</h4><p>${esc(r.hazards)}</p></div><div class="block"><h4>Recipiente / EPP</h4><p><b>Recipiente:</b> ${esc(r.container)}<br><b>EPP:</b> ${esc(r.ppe)}</p></div></div>
@@ -1068,8 +1080,8 @@ function sgaClear(){
   $('sgaDilSel').value='lpu';
   $('sgaDilInfo').style.display='none';
   $('sgaDilOtra').style.display='none';
-  $('ckSgaFecha').checked=false;
-  $('ckSgaExp').checked=false;
+  $('ckSgaFecha').checked=false; $('sgaDate').style.display='none';
+  $('ckSgaExp').checked=false; $('sgaExp').style.display='none';
   window._sgaDilOv=null;
 }
 
