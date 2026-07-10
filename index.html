@@ -568,15 +568,24 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
       </div>
       <div class="dil-info" id="calcCustomResult" style="margin-top:10px;display:block"></div>
 
-      <h3 style="margin:22px 0 8px;font-size:15px;color:var(--azul)">Cómo se calcula (explicación)</h3>
+      <h3 style="margin:22px 0 8px;font-size:15px;color:var(--azul)">Por qué se calcula así (fundamento)</h3>
       <div class="howto-body" style="padding:0">
+        <p><b>1. Por qué 1% equivale a 10.000 ppm.</b><br>
+        "%" en una solución (concentración peso/volumen) significa gramos de soluto cada 100 ml de solución. "ppm" (partes por millón) equivale a mg de soluto cada litro (1.000.000 mg) de solución. Convirtiendo unidades: 1% = 1 g/100 ml = 10 g/L = 10.000 mg/L = 10.000 ppm. Por eso una lavandina al 5,5% tiene 5,5 × 10.000 = 55.000 ppm de cloro disponible en estado puro.</p>
+
+        <p><b>2. Por qué se usa C1×V1 = C2×V2 (principio de conservación de la masa).</b><br>
+        Al diluir, la cantidad total de cloro disponible (soluto) no cambia — solo se le agrega agua, que no aporta ni quita cloro. La cantidad de soluto se calcula como concentración × volumen. Entonces:</p>
         <ol>
-          <li>La concentración de cloro disponible de la lavandina en porcentaje se convierte a partes por millón (ppm) multiplicando por 10.000. Ejemplo: 5,5% × 10.000 = 55.000 ppm. Esa es la concentración del producto puro (C1).</li>
-          <li>Se aplica la fórmula de dilución: <b>C1 × V1 = C2 × V2</b>, donde C1 es la concentración de la lavandina (ppm), V1 es el volumen de lavandina a agregar (lo que se busca), C2 es la concentración final deseada (ppm) y V2 es el volumen final total de la solución.</li>
-          <li>Despejando: <b>V1 = (C2 × V2) / C1</b>. Es decir: (ppm deseado × volumen final) dividido la concentración de la lavandina en ppm.</li>
-          <li>Ese resultado (V1) son los ml de lavandina que hay que agregar; el resto, hasta completar el volumen final (V2), es agua.</li>
+          <li>Cantidad de cloro que aporta la lavandina concentrada = C1 × V1 (concentración de la lavandina × volumen de lavandina que se agrega).</li>
+          <li>Cantidad de cloro en la solución final diluida = C2 × V2 (concentración deseada × volumen final total, lavandina + agua).</li>
+          <li>Como la cantidad de cloro es la misma antes y después de diluir (no se crea ni se destruye, solo se reparte en más volumen): <b>C1 × V1 = C2 × V2</b>.</li>
+          <li>Despejando el dato que se busca (V1, cuánta lavandina agregar): <b>V1 = (C2 × V2) / C1</b>.</li>
         </ol>
-        <div class="tip">Ejemplo: para preparar 1000 ppm en 1 litro (1000 ml) con lavandina al 5,5% (55.000 ppm): V1 = (1000 × 1000) / 55.000 = 18,2 ml de lavandina + agua hasta completar 1 litro.</div>
+        <p>Esta es la fórmula estándar utilizada en los protocolos de preparación de soluciones cloradas para desinfección de la Organización Panamericana de la Salud / OMS (recomendaciones OPS/OMS para preparación de soluciones desinfectantes con hipoclorito de sodio) y en las guías de dosificación de cloro para sistemas de agua, por lo que el cálculo es trazable y verificable ante una auditoría o control de calidad.</p>
+
+        <div class="tip">Ejemplo desarrollado: para preparar 1000 ppm en 1 litro (1000 ml) con lavandina al 5,5% (55.000 ppm):<br>
+        V1 = (C2 × V2) / C1 = (1000 ppm × 1000 ml) / 55.000 ppm = 1.000.000 / 55.000 = <b>18,18 ml de lavandina</b> (se redondea a 18,2 ml para medir con jeringa) + agua hasta completar 1000 ml.<br>
+        Verificación: 18,18 ml × 55.000 ppm = 1.000.000, exactamente igual a 1000 ppm × 1000 ml. El cloro se conserva, solo cambia el volumen; el redondeo a 18,2 ml es la diferencia práctica de medición, no un error de fórmula.</div>
         <div class="tip">⚠ Preparar siempre con agua fría, en envase opaco y rotulado, y usar dentro de las 24 hs. Validar la concentración real de la lavandina disponible (verificar etiqueta del envase) antes de calcular, ya que puede variar entre marcas y lotes.</div>
       </div>
     </div>
