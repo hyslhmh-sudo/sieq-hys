@@ -179,6 +179,11 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
 
 /* ─── DIL INFO BOX ─── */
 .dil-info{background:#f0fafa;border-left:3px solid var(--petroleo);padding:7px 10px;border-radius:6px;font-size:11.5px;line-height:1.4;margin-top:4px;display:none}
+.calc-table{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}
+.calc-table th,.calc-table td{border:1px solid #d8e2e2;padding:8px 10px;text-align:center}
+.calc-table thead th{background:var(--azul);color:#fff;font-weight:700;font-size:12px}
+.calc-table td.calc-row-head{background:#eef6f6;font-weight:800;color:var(--azul);text-align:left}
+.calc-table tbody tr:nth-child(even){background:#f7fbfb}
 
 /* ─── PRINT SGA ─── */
 @media print{
@@ -219,6 +224,7 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
     <div class="module-tabs">
       <button class="module-tab active" onclick="switchModule('residuos',this)">⚠ Residuos peligrosos</button>
       <button class="module-tab" onclick="switchModule('sga',this)">🏷 Etiquetas SGA / GHS</button>
+      <button class="module-tab" onclick="switchModule('calc',this)">🧮 Calculadora hipoclorito</button>
     </div>
   </div>
 </header>
@@ -453,10 +459,10 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
             <option value="1:200">Dilucion 1:200</option>
           </optgroup>
           <optgroup label="Hipoclorito de sodio NaOCl 5,5%">
-            <option value="hip_100">100 ppm (13,6 ml en 5 L)</option>
-            <option value="hip_200">200 ppm (27,3 ml en 5 L)</option>
-            <option value="hip_500">500 ppm (54,5 ml en 5 L)</option>
-            <option value="hip_5000">5000 ppm (109 ml en 1 L)</option>
+            <option value="hip_100">100 ppm (9,1 ml en 5 L)</option>
+            <option value="hip_200">200 ppm (18,2 ml en 5 L)</option>
+            <option value="hip_500">500 ppm (45,5 ml en 5 L)</option>
+            <option value="hip_5000">5000 ppm (90,9 ml en 1 L)</option>
           </optgroup>
           <optgroup label="ISOCLOR sobres 25 gr (Manual HZT)">
             <option value="iso_200">200 ppm - Areas admin/generales (1 sobre en 50 L)</option>
@@ -524,7 +530,111 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
   </div>
 </div>
 
+<!-- ─── MODULO CALCULADORA HIPOCLORITO ─── -->
+<div id="mod-calc" class="module-section">
+  <section class="panel">
+    <h2>Calculadora de dilución de hipoclorito de sodio</h2>
+    <div class="panel-body">
+      <div class="notice">Calcula cuántos ml de lavandina (hipoclorito de sodio) agregar para llegar a una concentración (ppm de cloro disponible) en un volumen de agua determinado. Elegí la concentración de la lavandina que tenés disponible en el establecimiento.</div>
+
+      <div class="row" style="margin-bottom:16px">
+        <label>Concentración de la lavandina disponible
+          <select id="calcConc" onchange="renderCalcTable()">
+            <option value="2.5">2,5%  (25.000 ppm de cloro disponible)</option>
+            <option value="5.5" selected>5,5%  (55.000 ppm de cloro disponible)</option>
+          </select>
+        </label>
+      </div>
+
+      <h3 style="margin:18px 0 8px;font-size:15px;color:var(--azul)">Tabla de referencia rápida</h3>
+      <div style="overflow-x:auto">
+        <table id="calcTable" class="calc-table"></table>
+      </div>
+
+      <h3 style="margin:22px 0 8px;font-size:15px;color:var(--azul)">Calculadora personalizada</h3>
+      <div class="row3">
+        <label>Concentración deseada (ppm)
+          <input type="number" id="calcPpmCustom" value="1000" min="1" oninput="renderCalcCustom()">
+        </label>
+        <label>Volumen de agua
+          <input type="number" id="calcVolCustom" value="1" min="0.001" step="0.001" oninput="renderCalcCustom()">
+        </label>
+        <label>Unidad
+          <select id="calcUnitCustom" onchange="renderCalcCustom()">
+            <option value="1">Litros (L)</option>
+            <option value="0.001">Mililitros (ml)</option>
+          </select>
+        </label>
+      </div>
+      <div class="dil-info" id="calcCustomResult" style="margin-top:10px;display:block"></div>
+
+      <h3 style="margin:22px 0 8px;font-size:15px;color:var(--azul)">Cómo se calcula (explicación)</h3>
+      <div class="howto-body" style="padding:0">
+        <ol>
+          <li>La concentración de cloro disponible de la lavandina en porcentaje se convierte a partes por millón (ppm) multiplicando por 10.000. Ejemplo: 5,5% × 10.000 = 55.000 ppm. Esa es la concentración del producto puro (C1).</li>
+          <li>Se aplica la fórmula de dilución: <b>C1 × V1 = C2 × V2</b>, donde C1 es la concentración de la lavandina (ppm), V1 es el volumen de lavandina a agregar (lo que se busca), C2 es la concentración final deseada (ppm) y V2 es el volumen final total de la solución.</li>
+          <li>Despejando: <b>V1 = (C2 × V2) / C1</b>. Es decir: (ppm deseado × volumen final) dividido la concentración de la lavandina en ppm.</li>
+          <li>Ese resultado (V1) son los ml de lavandina que hay que agregar; el resto, hasta completar el volumen final (V2), es agua.</li>
+        </ol>
+        <div class="tip">Ejemplo: para preparar 1000 ppm en 1 litro (1000 ml) con lavandina al 5,5% (55.000 ppm): V1 = (1000 × 1000) / 55.000 = 18,2 ml de lavandina + agua hasta completar 1 litro.</div>
+        <div class="tip">⚠ Preparar siempre con agua fría, en envase opaco y rotulado, y usar dentro de las 24 hs. Validar la concentración real de la lavandina disponible (verificar etiqueta del envase) antes de calcular, ya que puede variar entre marcas y lotes.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
 </main>
+
+<script>
+const CALC_PPMS=[100,200,500,1000,5000,10000];
+const CALC_VOLS_ML=[250,500,1000,5000,10000,20000];
+function calcMl(ppm, volMl, concPct){
+  const stockPpm = concPct*10000;
+  return (ppm*volMl)/stockPpm;
+}
+function fmtMl(v){
+  if(v>=1000) return (v/1000).toFixed(2).replace('.',',')+' L';
+  if(v>=100) return v.toFixed(0)+' ml';
+  if(v>=10) return v.toFixed(1).replace('.',',')+' ml';
+  return v.toFixed(2).replace('.',',')+' ml';
+}
+function fmtVolLabel(ml){
+  if(ml>=1000) return (ml/1000)+' L';
+  return ml+' ml';
+}
+function renderCalcTable(){
+  const conc=parseFloat(document.getElementById('calcConc').value);
+  let html='<thead><tr><th>ppm objetivo / Volumen de agua</th>';
+  CALC_VOLS_ML.forEach(v=>html+=`<th>${fmtVolLabel(v)}</th>`);
+  html+='</tr></thead><tbody>';
+  CALC_PPMS.forEach(ppm=>{
+    html+=`<tr><td class="calc-row-head">${ppm} ppm</td>`;
+    CALC_VOLS_ML.forEach(v=>{
+      const ml=calcMl(ppm,v,conc);
+      html+=`<td>${fmtMl(ml)}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody>';
+  document.getElementById('calcTable').innerHTML=html;
+  renderCalcCustom();
+}
+function renderCalcCustom(){
+  const conc=parseFloat(document.getElementById('calcConc').value);
+  const ppm=parseFloat(document.getElementById('calcPpmCustom').value)||0;
+  const volRaw=parseFloat(document.getElementById('calcVolCustom').value)||0;
+  const unitMult=parseFloat(document.getElementById('calcUnitCustom').value);
+  const volMl=volRaw*1000*unitMult;
+  if(ppm<=0||volMl<=0){document.getElementById('calcCustomResult').innerHTML='Ingresá valores válidos.';return;}
+  const ml=calcMl(ppm,volMl,conc);
+  const stockPpm=conc*10000;
+  document.getElementById('calcCustomResult').innerHTML=
+    `Para preparar <b>${ppm} ppm</b> en <b>${fmtVolLabel(volMl)}</b> de agua, con lavandina al <b>${conc}%</b> (${stockPpm.toLocaleString('es-AR')} ppm):<br>`+
+    `<b style="font-size:18px;color:var(--rojo)">${fmtMl(ml)} de lavandina</b> + agua hasta completar ${fmtVolLabel(volMl)}.<br>`+
+    `<span style="font-size:12px;color:#666">Cálculo: (${ppm} × ${volMl}) / ${stockPpm} = ${ml.toFixed(2)} ml</span>`;
+}
+renderCalcTable();
+</script>
 
 <script>
 const ADMIN_KEY = 'HYS-HMH';
@@ -548,10 +658,10 @@ const GHS_META = {
 };
 
 const DIL_INFO = {
-  hip_100:'Hipoclorito de sodio NaOCl 5,5%<br>Preparacion: 13,6 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs. Conservar en envase opaco cerrado.',
-  hip_200:'Hipoclorito de sodio NaOCl 5,5%<br>Preparacion: 27,3 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs. Conservar en envase opaco cerrado.',
-  hip_500:'Hipoclorito de sodio NaOCl 5,5%<br>Preparacion: 54,5 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs.',
-  hip_5000:'Hipoclorito de sodio NaOCl 5,5% - Alta concentracion<br>Preparacion: 109 ml de lavandina en 1 L de agua FRIA<br>ALTA CONCENTRACION. EPP obligatorio. NO mezclar con agua caliente.',
+  hip_100:'Hipoclorito de sodio NaOCl 5,5%<br>Preparacion: 9,1 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs. Conservar en envase opaco cerrado.',
+  hip_200:'Hipoclorito de sodio NaOCl 5,5%<br>Preparacion: 18,2 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs. Conservar en envase opaco cerrado.',
+  hip_500:'Hipoclorito de sodio NaOCl 5,5%<br>Preparacion: 45,5 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs.',
+  hip_5000:'Hipoclorito de sodio NaOCl 5,5% - Alta concentracion<br>Preparacion: 90,9 ml de lavandina en 1 L de agua FRIA<br>ALTA CONCENTRACION. EPP obligatorio. NO mezclar con agua caliente.',
   iso_200:'ISOCLOR 200 ppm - Areas admin/generales<br>Preparacion: 1 sobre 25 gr en 50 L. Reposar minimo 1 hora antes de usar.',
   iso_500:'ISOCLOR 500 ppm - Salas de internacion<br>Preparacion: 1 sobre 25 gr en 20 L. Reposar minimo 1 hora.',
   iso_1000:'ISOCLOR 1000 ppm - Areas criticas / aislamientos<br>Preparacion: 1 sobre 25 gr en 10 L. Reposar minimo 1 hora.',
