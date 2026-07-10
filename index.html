@@ -525,7 +525,6 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
             <option value="96%">Concentracion 96%</option>
             <option value="10%">Concentracion 10%</option>
             <option value="5.5%">Concentracion 5.5%</option>
-            <option value="5%">Concentracion 5%</option>
             <option value="2.5%">Concentracion 2.5%</option>
             <option value="1%">Concentracion 1%</option>
             <option value="0.5%">Concentracion 0.5%</option>
@@ -908,9 +907,18 @@ function resetDB(){if(confirm('Restaurar base inicial y perder cambios locales?'
 // ─── SGA MODULE ───
 function sgaPopulate(){
   const sel = $('sgaProd'); sel.innerHTML = '';
+  // Primera opción: completar a mano
+  const blank = document.createElement('option');
+  blank.value = '__manual__';
+  blank.textContent = '[ Completar a mano ]';
+  sel.appendChild(blank);
   PRODUCTS.forEach(p => {const o=document.createElement('option'); o.value=p.name; o.textContent=p.name; sel.appendChild(o);});
 }
-function sgaCurProd(){return PRODUCTS.find(p=>p.name===$('sgaProd').value)||PRODUCTS[0];}
+function sgaCurProd(){
+  const val = $('sgaProd').value;
+  if(val === '__manual__') return {name:'',cas:'',signal:'',ghs:[],h:[],p:[],source:''};
+  return PRODUCTS.find(p=>p.name===val)||PRODUCTS[0];
+}
 function sgaProdChange(){
   // Reset dil override when product changes
   window._sgaDilOv = null;
@@ -997,7 +1005,7 @@ function sgaBuildLabel(p, fmt){
 
     <!-- NOMBRE Y SEÑAL: SIEMPRE DESTACADOS -->
     <div style="border-bottom:2px solid var(--azul);padding-bottom:${fmt==='xl'?'8px':fmt==='l'?'6px':'4px'};margin-bottom:${fmt==='xl'?'4px':fmt==='l'?'3px':'2px'}">
-      <div class="sga-name" style="font-size:${s.title};font-weight:900;color:var(--azul);text-transform:uppercase;line-height:1.05;margin-bottom:4px">${esc(p.name)}</div>
+      <div class="sga-name" style="font-size:${s.title};font-weight:900;color:var(--azul);text-transform:uppercase;line-height:1.05;margin-bottom:4px">${p.name ? esc(p.name) : '<span style="display:inline-block;min-width:200px;border-bottom:2px solid var(--azul)">&nbsp;</span>'}</div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <span class="sga-signal ${sigCls}" style="font-size:${s.signal};padding:${fmt==='xl'?'4px 12px':fmt==='l'?'3px 9px':'2px 6px'}">${esc(signal)}</span>
         <span style="font-size:${s.meta};color:#475569"><b>CAS:</b> ${esc(p.cas)} &nbsp;|&nbsp; <b>FDS:</b> ${esc(p.source)}</span>
