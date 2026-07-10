@@ -452,10 +452,11 @@ label{display:block;font-size:12px;font-weight:700;color:#334155;margin:10px 0 6
             <option value="1:100">Dilucion 1:100</option>
             <option value="1:200">Dilucion 1:200</option>
           </optgroup>
-          <optgroup label="Hipoclorito NaOCl 6% (Manual HZT)">
-            <option value="hip_200">200 ppm - Areas no criticas (25 ml en 5 L)</option>
-            <option value="hip_500">500 ppm - Areas semicriticas (50 ml en 5 L)</option>
-            <option value="hip_5000">5000 ppm - Areas criticas / derrame sangre (100 ml en 1 L)</option>
+          <optgroup label="Hipoclorito de sodio NaOCl 5,5%">
+            <option value="hip_100">100 ppm (13,6 ml en 5 L)</option>
+            <option value="hip_200">200 ppm (27,3 ml en 5 L)</option>
+            <option value="hip_500">500 ppm (54,5 ml en 5 L)</option>
+            <option value="hip_5000">5000 ppm (109 ml en 1 L)</option>
           </optgroup>
           <optgroup label="ISOCLOR sobres 25 gr (Manual HZT)">
             <option value="iso_200">200 ppm - Areas admin/generales (1 sobre en 50 L)</option>
@@ -547,9 +548,10 @@ const GHS_META = {
 };
 
 const DIL_INFO = {
-  hip_200:'Hipoclorito 6% - Areas NO criticas<br>Preparacion: 25 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs. Conservar en envase opaco cerrado.',
-  hip_500:'Hipoclorito 6% - Areas SEMICRITICAS<br>Preparacion: 50 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs.',
-  hip_5000:'Hipoclorito 6% - AREAS CRITICAS / Derrame sangre o fluidos<br>Preparacion: 100 ml de lavandina en 1 L de agua FRIA<br>ALTA CONCENTRACION. EPP obligatorio. NO mezclar con agua caliente.',
+  hip_100:'Hipoclorito de sodio NaOCl 5,5%<br>Preparacion: 13,6 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs. Conservar en envase opaco cerrado.',
+  hip_200:'Hipoclorito de sodio NaOCl 5,5%<br>Preparacion: 27,3 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs. Conservar en envase opaco cerrado.',
+  hip_500:'Hipoclorito de sodio NaOCl 5,5%<br>Preparacion: 54,5 ml de lavandina en 5 L de agua FRIA<br>Usar dentro de las 24 hs.',
+  hip_5000:'Hipoclorito de sodio NaOCl 5,5% - Alta concentracion<br>Preparacion: 109 ml de lavandina en 1 L de agua FRIA<br>ALTA CONCENTRACION. EPP obligatorio. NO mezclar con agua caliente.',
   iso_200:'ISOCLOR 200 ppm - Areas admin/generales<br>Preparacion: 1 sobre 25 gr en 50 L. Reposar minimo 1 hora antes de usar.',
   iso_500:'ISOCLOR 500 ppm - Salas de internacion<br>Preparacion: 1 sobre 25 gr en 20 L. Reposar minimo 1 hora.',
   iso_1000:'ISOCLOR 1000 ppm - Areas criticas / aislamientos<br>Preparacion: 1 sobre 25 gr en 10 L. Reposar minimo 1 hora.',
@@ -558,15 +560,19 @@ const DIL_INFO = {
 };
 
 const DIL_OVERRIDE = {
-  hip_200:{label:'200 ppm NaOCl - Area no critica',signal:'ATENCION',ghs:['GHS07'],
+  hip_100:{label:'100 ppm NaOCl',signal:'ATENCION',ghs:['GHS07'],
     h:['H315 - Puede provocar irritacion cutanea leve en contacto prolongado.','H319 - Puede provocar irritacion ocular leve.','H400 - Nocivo para organismos acuaticos. No verter en desague.'],
     p:['P260 - Evitar respirar vapores. Usar en area ventilada.','P273 - No dispersar en el medio ambiente.','P280 - Usar guantes de goma domesticos.','P305+P351 - EN CASO DE CONTACTO CON OJOS: enjuagar con agua abundante.','P501 - Eliminar segun normativa institucional.'],
     epp:'Guantes de goma. Lavado de manos posterior.',nota:'Preparar con agua FRIA. No mezclar con detergente. Usar dentro de las 24 hs.'},
-  hip_500:{label:'500 ppm NaOCl - Area semicritica',signal:'ATENCION',ghs:['GHS05','GHS07'],
+  hip_200:{label:'200 ppm NaOCl',signal:'ATENCION',ghs:['GHS07'],
+    h:['H315 - Puede provocar irritacion cutanea leve en contacto prolongado.','H319 - Puede provocar irritacion ocular leve.','H400 - Nocivo para organismos acuaticos. No verter en desague.'],
+    p:['P260 - Evitar respirar vapores. Usar en area ventilada.','P273 - No dispersar en el medio ambiente.','P280 - Usar guantes de goma domesticos.','P305+P351 - EN CASO DE CONTACTO CON OJOS: enjuagar con agua abundante.','P501 - Eliminar segun normativa institucional.'],
+    epp:'Guantes de goma. Lavado de manos posterior.',nota:'Preparar con agua FRIA. No mezclar con detergente. Usar dentro de las 24 hs.'},
+  hip_500:{label:'500 ppm NaOCl',signal:'ATENCION',ghs:['GHS05','GHS07'],
     h:['H315 - Provoca irritacion cutanea en contacto prolongado.','H319 - Provoca irritacion ocular.','H335 - Puede irritar las vias respiratorias.','H400 - Nocivo para organismos acuaticos.'],
     p:['P260 - No respirar vapores.','P271 - Utilizar en areas bien ventiladas.','P273 - No dispersar en el medio ambiente.','P280 - Guantes de goma y proteccion ocular si hay salpicadura.','P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar con agua varios minutos.'],
     epp:'Guantes de goma resistentes. Proteccion ocular ante salpicadura. Ventilacion adecuada.',nota:'Preparar con agua FRIA. NUNCA mezclar con detergente ni amoniaco (gases toxicos). Usar dentro de las 24 hs.'},
-  hip_5000:{label:'5000 ppm NaOCl - Area critica / Derrame sangre',signal:'PELIGRO',ghs:['GHS05','GHS07','GHS09'],
+  hip_5000:{label:'5000 ppm NaOCl - Alta concentracion',signal:'PELIGRO',ghs:['GHS05','GHS07','GHS09'],
     h:['H290 - Puede ser corrosivo para metales.','H314 - Provoca quemaduras en piel y lesiones oculares graves.','H335 - Irrita las vias respiratorias.','H400 - Muy nocivo para organismos acuaticos.'],
     p:['P260 - No respirar vapores. Uso en areas ventiladas.','P271 - Utilizar solo en exteriores o con ventilacion forzada.','P273 - No dispersar en el medio ambiente.','P280 - EPP COMPLETO OBLIGATORIO: guantes, antiparras, delantal.','P305+P351+P338 - EN CASO DE CONTACTO CON OJOS: enjuagar varios minutos. Consultar medico.','P310 - Llamar a CENTRO DE TOXICOLOGIA: 0800-333-0160.'],
     epp:'EPP COMPLETO: Guantes resistentes goma/PVC. Antiparras. Delantal impermeable. Barbijo si area cerrada.',nota:'ALTA CONCENTRACION. Preparar con agua FRIA. NUNCA mezclar con detergente, amoniaco ni acidos. Usar dentro de las 24 hs.'},
