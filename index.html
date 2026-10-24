@@ -945,12 +945,15 @@ function generateLabels(){
   let obs=$('observaciones').value || r.note;
   const cardClass=(r.code==='Y14')?'label-card noapt':'label-card';
   const subtype = selectedY3Subtype();
+  // 24/10/2026: ejemplos propios de cada diferenciación de Y3 (en el bidón van solo ampollas y frascos ampolla de vidrio)
+  const Y3_EJEMPLOS = { 'Ampollas / frascos ampolla en bidon': 'Solo ampollas y frascos ampolla de vidrio, utilizados o vencidos.' };
+  const ejemplos = (r.code==='Y3' && Y3_EJEMPLOS[$('y3Subtype').value]) || r.examples;
   const html = Array.from({length:n}).map(()=>`<article class="${cardClass}">
 <div class="lab-head"><div class="lab-brand"><div class="lab-logo">${renderLabelLogo()}</div><div><div class="lab-hospital">${esc(getHospName().split('·')[0].trim())}</div><div class="lab-sub">Etiqueta interna de residuo peligroso</div></div></div><div class="lab-sign">Servicio de Higiene y Seguridad Laboral<br>Lic. Belén Pellegrini</div></div>
 <div class="lab-main">
   <div class="ybox"><div class="code ${String(r.code||'').length>2?'small-code':''}">${esc(r.code)}</div><div class="class">Clase</div></div>
   <div class="titlebox"><div class="kind">Residuo peligroso</div><div class="title ${titleSizeClass}">${esc(name)}</div></div>
-  ${subtype ? `<div class="subtype-banner"><b>Diferenciacion Y3:</b> ${esc(subtype)}</div>` : ''}
+  ${subtype ? `<div class="subtype-banner"><b>Diferenciación Y3:</b> ${esc(subtype)}</div>` : ''}
   <div class="fieldline">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:11px">
       <div><b>Servicio:</b> ${$('sector').value ? esc($('sector').value) : '<span style="display:inline-block;min-width:90px;border-bottom:1.5px solid #333">&nbsp;</span>'}</div>
@@ -965,7 +968,7 @@ function generateLabels(){
   ${resolvePictos(r).length ? `<div class="picto-row">${renderPictos(r)}</div>` : ''}
   <div class="blocks"><div class="block danger-block"><h4>Incompatibilidades / No mezclar</h4><p>${esc(r.incompat)}</p></div><div class="block store"><h4>Almacenamiento</h4><p>${esc(r.storage)}</p></div></div>
   <div class="blocks"><div class="block"><h4>Características peligrosas</h4><p>${esc(r.hazards)}</p></div><div class="block"><h4>Recipiente / EPP</h4><p><b>Recipiente:</b> ${esc(r.container)}<br><b>EPP:</b> ${esc(r.ppe)}</p></div></div>
-  <div class="fieldline examples-line"><b>Ejemplos/alcance:</b> ${esc(r.examples)}</div>
+  <div class="fieldline examples-line"><b>Ejemplos/alcance:</b> ${esc(ejemplos)}</div>
   <div class="footer-note">${esc(obs)}</div>
 </div>
 </article>`).join('');
